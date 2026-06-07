@@ -13,16 +13,19 @@ export default function AdminDashboard() {
   const { token } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
-    Promise.all([
-      api.get('/admin/dashboard', token),
-      api.get('/admin/users', token),
-    ]).then(([s, u]) => {
-      setStats(s);
-      setUsers(u.users);
-    });
+    (async () => {
+      const [statsRes, usersRes] = await Promise.allSettled([
+        api.get('/admin/dashboard', token),
+        api.get('/admin/users', token),
+      ]);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value);
+      if (usersRes.status === 'fulfilled') setUsers(usersRes.value.users);
+      setLoading(false);
+    })();
   }, [token]);
 
   const verifyEmployer = async (userId: string) => {
@@ -33,6 +36,14 @@ export default function AdminDashboard() {
       toast.error('Chyba pri overovaní');
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

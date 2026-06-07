@@ -17,12 +17,15 @@ export default function JobApplicationsPage() {
   const { id } = useParams();
   const { token } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token || !id) return;
+    setLoading(true);
     api.get(`/applications/job/${id}`, token)
       .then(setApplications)
+      .catch((err) => setError(err.message || 'Nepodarilo sa načítať prihlášky'))
       .finally(() => setLoading(false));
   }, [token, id]);
 
@@ -42,6 +45,19 @@ export default function JobApplicationsPage() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Link href="/dashboard/employer" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900">
+            <ArrowLeft className="h-4 w-4 mr-1" /> Späť na dashboard
+          </Link>
+        </div>
       </div>
     );
   }
@@ -68,7 +84,7 @@ export default function JobApplicationsPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
-                      {app.user.firstName[0]}{app.user.lastName[0]}
+                      {(app.user?.firstName?.[0] || '?')}{(app.user?.lastName?.[0] || '')}
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{app.user.firstName} {app.user.lastName}</p>

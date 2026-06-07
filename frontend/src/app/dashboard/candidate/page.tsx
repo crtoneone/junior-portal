@@ -20,17 +20,19 @@ export default function CandidateDashboard() {
 
   useEffect(() => {
     if (!token) return;
-    Promise.all([
-      api.get('/applications/my', token),
-      api.get('/applications/my/stats', token),
-      api.get('/candidates/saved-jobs', token),
-      api.get('/candidates/recommended', token),
-    ]).then(([apps, st, saved, rec]) => {
-      setApplications(apps);
-      setStats(st);
-      setSavedJobs(saved);
-      setRecommended(rec);
-    }).finally(() => setLoading(false));
+    (async () => {
+      const [appsRes, statsRes, savedRes, recRes] = await Promise.allSettled([
+        api.get('/applications/my', token),
+        api.get('/applications/my/stats', token),
+        api.get('/candidates/saved-jobs', token),
+        api.get('/candidates/recommended', token),
+      ]);
+      if (appsRes.status === 'fulfilled') setApplications(appsRes.value);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value);
+      if (savedRes.status === 'fulfilled') setSavedJobs(savedRes.value);
+      if (recRes.status === 'fulfilled') setRecommended(recRes.value);
+      setLoading(false);
+    })();
   }, [token]);
 
   if (loading) {

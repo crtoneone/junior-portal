@@ -45,8 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await api.get<User>('/auth/profile', t);
       setUser(userData);
     } catch {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      setUser(null);
     } finally {
       setLoading(false);
     }

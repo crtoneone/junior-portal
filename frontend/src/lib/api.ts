@@ -4,6 +4,44 @@ interface FetchOptions extends RequestInit {
   token?: string;
 }
 
+let refreshPromise: Promise<string | null> | null = null;
+
+async function doRefresh(): Promise<string | null> {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    try {
+      const stored = localStorage.getItem('refreshToken');
+      if (!stored) return null;
+
+      const res = await fetch(`${API_BASE}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken: stored }),
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        return null;
+      }
+
+      const json = await res.json();
+      localStorage.setItem('accessToken', json.data.accessToken);
+      localStorage.setItem('refreshToken', json.data.refreshToken);
+      return json.data.accessToken;
+    } catch {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      return null;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
+
 async function fetchApi<T = any>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { token, ...fetchOpts } = options;
 
@@ -20,6 +58,22 @@ async function fetchApi<T = any>(endpoint: string, options: FetchOptions = {}): 
     ...fetchOpts,
     headers,
   });
+
+  if (res.status === 401 && endpoint !== '/auth/refresh') {
+    const newToken = await doRefresh();
+    if (newToken) {
+      headers['Authorization'] = `Bearer ${newToken}`;
+      const retryRes = await fetch(`${API_BASE}${endpoint}`, {
+        ...fetchOpts,
+        headers,
+      });
+      if (retryRes.ok) {
+        const json = await retryRes.json();
+        return json.data;
+      }
+    }
+    throw new ApiError('Session expired. Please login again.', 401);
+  }
 
   const json = await res.json();
 

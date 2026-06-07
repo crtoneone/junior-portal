@@ -15,6 +15,7 @@ export default function CandidateProfilePage() {
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [fetchError, setFetchError] = useState('');
   const [form, setForm] = useState({
     title: '',
     bio: '',
@@ -45,6 +46,8 @@ export default function CandidateProfilePage() {
           isOpenToWork: profile.isOpenToWork ?? true,
         });
       }
+    }).catch((err) => {
+      setFetchError(err.message || 'Nepodarilo sa načítať profil');
     }).finally(() => setFetching(false));
   }, [token]);
 
@@ -69,6 +72,16 @@ export default function CandidateProfilePage() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{fetchError}</p>
+        </div>
       </div>
     );
   }

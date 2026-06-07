@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "sonner";
@@ -24,9 +25,11 @@ export default function RootLayout({
     <html lang="sk" className="h-full antialiased">
       <body className={`${inter.className} min-h-full flex flex-col`}>
         <AuthProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <ErrorBoundary>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ErrorBoundary>
           <Toaster position="top-right" richColors />
         </AuthProvider>
       </body>

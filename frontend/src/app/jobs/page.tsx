@@ -16,10 +16,12 @@ export default function JobsPage() {
   const [search, setSearch] = useState('');
   const [type, setType] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
+    setError('');
     const params = new URLSearchParams();
     if (search) params.set('search', search);
     if (type) params.set('type', type);
@@ -31,6 +33,7 @@ export default function JobsPage() {
         setJobs(data.jobs);
         setPagination(data.pagination);
       })
+      .catch((err) => setError(err.message || 'Nepodarilo sa načítať ponuky'))
       .finally(() => setLoading(false));
   }, [search, type, page]);
 
@@ -67,7 +70,12 @@ export default function JobsPage() {
         </select>
       </div>
 
-      {loading ? (
+      {error ? (
+        <div className="text-center py-16">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Button variant="outline" onClick={() => window.location.reload()}>Skúsiť znova</Button>
+        </div>
+      ) : loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1,2,3,4,5,6].map((i) => (
             <Card key={i} className="animate-pulse">

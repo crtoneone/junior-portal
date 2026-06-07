@@ -20,6 +20,7 @@ export default function JobDetailPage() {
   const router = useRouter();
   const [job, setJob] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [coverLetter, setCoverLetter] = useState('');
@@ -28,8 +29,12 @@ export default function JobDetailPage() {
 
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
+    setError('');
     api.get(`/jobs/${id}`).then((data) => {
       setJob(data);
+    }).catch((err) => {
+      setError(err.message || 'Nepodarilo sa načítať ponuku');
     }).finally(() => setLoading(false));
   }, [id]);
 
@@ -74,6 +79,19 @@ export default function JobDetailPage() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Link href="/jobs" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900">
+            <ArrowLeft className="h-4 w-4 mr-1" /> Späť na ponuky
+          </Link>
+        </div>
       </div>
     );
   }

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth';
 import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CardTitle as CardTitle2 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -19,13 +18,15 @@ export default function EmployerDashboard() {
 
   useEffect(() => {
     if (!token) return;
-    Promise.all([
-      api.get('/jobs/employer/mine', token),
-      api.get('/jobs/employer/stats', token),
-    ]).then(([j, s]) => {
-      setJobs(j);
-      setStats(s);
-    }).finally(() => setLoading(false));
+    (async () => {
+      const [jobsRes, statsRes] = await Promise.allSettled([
+        api.get('/jobs/employer/mine', token),
+        api.get('/jobs/employer/stats', token),
+      ]);
+      if (jobsRes.status === 'fulfilled') setJobs(jobsRes.value);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value);
+      setLoading(false);
+    })();
   }, [token]);
 
   if (loading) {
@@ -100,7 +101,7 @@ export default function EmployerDashboard() {
 
       <Card>
         <CardHeader>
-          <CardTitle2 className="text-lg">Tvoje ponuky</CardTitle2>
+          <CardTitle className="text-lg">Tvoje ponuky</CardTitle>
         </CardHeader>
         <CardContent>
           {jobs.length === 0 ? (
