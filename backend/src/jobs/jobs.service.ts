@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { SavedSearchesService } from '../saved-searches/saved-searches.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 
@@ -27,7 +29,11 @@ function deserialize(job: any) {
 
 @Injectable()
 export class JobsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationsService: NotificationsService,
+    private savedSearchesService: SavedSearchesService,
+  ) {}
 
   async findAll(filters: {
     search?: string;
@@ -145,6 +151,45 @@ export class JobsService {
       },
     });
 
+    const candidates = await this.prisma.user.findMany({
+      where: {
+        role: 'CANDIDATE',
+        isActive: true,
+        candidateProfile: {
+          isNot: null,
+        },
+      },
+      include: {
+        candidateProfile: {
+          select: { skills: true },
+        },
+      },
+    });
+
+    this.savedSearchesService.processNewJob(job).catch(() => {});
+
+    const jobSkills: string[] = dto.skills || [];
+    if (jobSkills.length > 0) {
+      const normalizedJobSkills = jobSkills.map(s => s.toLowerCase().trim());
+      const matchedCandidates = candidates.filter(c => {
+        if (!c.candidateProfile?.skills) return false;
+        try {
+          const profileSkills: string[] = JSON.parse(c.candidateProfile.skills);
+          return profileSkills.some(ps => normalizedJobSkills.some(js => ps.toLowerCase().includes(js) || js.includes(ps.toLowerCase())));
+        } catch { return false; }
+      });
+
+      for (const candidate of matchedCandidates) {
+        await this.notificationsService.create({
+          userId: candidate.id,
+          title: 'Nová pracovná ponuka',
+          message: `Bola pridaná nová ponuka "${job.title}", ktorá by ťa mohla zaujímať.`,
+          type: 'info',
+          link: `/jobs/${job.id}`,
+        });
+      }
+    }
+
     return deserialize(job);
   }
 
@@ -176,6 +221,21 @@ export class JobsService {
     if (!job) throw new NotFoundException('Job not found');
     if (job.employer.userId !== userId) {
       throw new ForbiddenException('You can only delete your own jobs');
+    }
+
+    const applicants = await this.prisma.application.findMany({
+      where: { jobId: id },
+      select: { userId: true },
+    });
+
+    for (const applicant of applicants) {
+      await this.notificationsService.create({
+        userId: applicant.userId,
+        title: 'Ponuka bola uzavretá',
+        message: `Ponuka "${job.title}" na ktorú si sa hlásil/a bola uzavretá.`,
+        type: 'warning',
+        link: `/jobs`,
+      });
     }
 
     return this.prisma.job.update({

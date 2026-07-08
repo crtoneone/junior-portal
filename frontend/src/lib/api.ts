@@ -23,6 +23,7 @@ async function doRefresh(): Promise<string | null> {
       if (!res.ok) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        window.dispatchEvent(new CustomEvent('session-expired'));
         return null;
       }
 
@@ -33,6 +34,7 @@ async function doRefresh(): Promise<string | null> {
     } catch {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      window.dispatchEvent(new CustomEvent('session-expired'));
       return null;
     } finally {
       refreshPromise = null;
@@ -72,6 +74,7 @@ async function fetchApi<T = any>(endpoint: string, options: FetchOptions = {}): 
         return json.data;
       }
     }
+    window.dispatchEvent(new CustomEvent('session-expired'));
     throw new ApiError('Session expired. Please login again.', 401);
   }
 

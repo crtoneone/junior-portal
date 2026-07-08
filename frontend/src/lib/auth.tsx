@@ -30,15 +30,59 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken');
-    if (storedToken) {
-      setToken(storedToken);
-      fetchUser(storedToken);
-    } else {
-      setLoading(false);
-    }
+  const clearAuth = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
   }, []);
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      clearAuth();
+    };
+    window.addEventListener('session-expired', handleSessionExpired);
+    return () => window.removeEventListener('session-expired', handleSessionExpired);
+  }, [clearAuth]);
+
+  useEffect(() => {
+    const initAuth = async () => {
+      const storedToken = localStorage.getItem('accessToken');
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
+      setToken(storedToken);
+      try {
+        const userData = await api.get<User>('/auth/profile', storedToken);
+        setUser(userData);
+      } catch {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+          try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/refresh`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ refreshToken }),
+            });
+            if (res.ok) {
+              const json = await res.json();
+              localStorage.setItem('accessToken', json.data.accessToken);
+              localStorage.setItem('refreshToken', json.data.refreshToken);
+              setToken(json.data.accessToken);
+              const userData = await api.get<User>('/auth/profile', json.data.accessToken);
+              setUser(userData);
+              return;
+            }
+          } catch {}
+        }
+        clearAuth();
+      } finally {
+        setLoading(false);
+      }
+    };
+    initAuth();
+  }, [clearAuth]);
 
   const fetchUser = async (t: string) => {
     try {
@@ -46,8 +90,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(userData);
     } catch {
       setUser(null);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -75,17 +117,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await api.post('/auth/logout', {}, token || undefined);
     } catch {}
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  }, [token]);
+    clearAuth();
+  }, [token, clearAuth]);
 
   const refreshUser = useCallback(async () => {
-    if (token) {
-      await fetchUser(token);
+    const storedToken = localStorage.getItem('accessToken');
+    if (storedToken) {
+      setToken(storedToken);
+      await fetchUser(storedToken);
     }
-  }, [token]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, loading, login, register, logout, refreshUser }}>

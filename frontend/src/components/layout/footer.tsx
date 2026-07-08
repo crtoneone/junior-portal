@@ -7,8 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">J</div>
-              <span className="text-lg font-bold text-gray-900">JuniorPortal</span>
+              <img src="/logo.png" alt="DajFlek" className="h-8 w-auto" />
             </div>
             <p className="text-sm text-gray-500">
               Pomáhame juniorom a stážistom nájsť ich prvú prácu v IT.

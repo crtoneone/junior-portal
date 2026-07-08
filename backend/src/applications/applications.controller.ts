@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Param, UseGuards } from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
+import { CreateGuestApplicationDto } from './dto/create-guest-application.dto';
 import { UpdateApplicationStatusDto } from './dto/update-status.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -16,6 +17,11 @@ export class ApplicationsController {
   @Roles('CANDIDATE')
   async apply(@Body() dto: CreateApplicationDto, @CurrentUser('sub') userId: string) {
     return this.applicationsService.apply(dto, userId);
+  }
+
+  @Post('guest')
+  async guestApply(@Body() dto: CreateGuestApplicationDto) {
+    return this.applicationsService.guestApply(dto);
   }
 
   @Get('my')

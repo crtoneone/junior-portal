@@ -67,6 +67,44 @@ export class CandidatesService {
     });
   }
 
+  async updateCv(cvId: string, userId: string, cvData: any) {
+    const profile = await this.prisma.candidateProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) throw new NotFoundException('Profile not found');
+
+    const existing = await this.prisma.savedCv.findFirst({
+      where: { id: cvId, candidateId: profile.id },
+    });
+
+    if (!existing) throw new NotFoundException('CV not found');
+
+    return this.prisma.savedCv.update({
+      where: { id: cvId },
+      data: {
+        cvData: typeof cvData === 'string' ? cvData : JSON.stringify(cvData),
+      },
+    });
+  }
+
+  async deleteCv(cvId: string, userId: string) {
+    const profile = await this.prisma.candidateProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) throw new NotFoundException('Profile not found');
+
+    const existing = await this.prisma.savedCv.findFirst({
+      where: { id: cvId, candidateId: profile.id },
+    });
+
+    if (!existing) throw new NotFoundException('CV not found');
+
+    await this.prisma.savedCv.delete({ where: { id: cvId } });
+    return { deleted: true };
+  }
+
   async toggleSaveJob(userId: string, jobId: string) {
     const existing = await this.prisma.savedJob.findUnique({
       where: { userId_jobId: { userId, jobId } },

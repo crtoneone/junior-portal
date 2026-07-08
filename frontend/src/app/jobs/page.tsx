@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,10 +11,12 @@ import Link from 'next/link';
 import { formatDate, formatSalary, getJobTypeLabel } from '@/lib/utils';
 import { Search, MapPin, Briefcase, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export default function JobsPage() {
+function JobsContent() {
+  const searchParams = useSearchParams();
   const [jobs, setJobs] = useState<any[]>([]);
   const [pagination, setPagination] = useState<any>({});
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [location, setLocation] = useState(searchParams.get('location') || '');
   const [type, setType] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -24,6 +27,7 @@ export default function JobsPage() {
     setError('');
     const params = new URLSearchParams();
     if (search) params.set('search', search);
+    if (location) params.set('location', location);
     if (type) params.set('type', type);
     params.set('page', page.toString());
     params.set('limit', '12');
@@ -35,7 +39,7 @@ export default function JobsPage() {
       })
       .catch((err) => setError(err.message || 'Nepodarilo sa načítať ponuky'))
       .finally(() => setLoading(false));
-  }, [search, type, page]);
+  }, [search, location, type, page]);
 
   const jobTypes = ['', 'FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'JUNIOR', 'CONTRACT'];
 
@@ -54,6 +58,15 @@ export default function JobsPage() {
             className="pl-10"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          />
+        </div>
+        <div className="relative sm:w-48">
+          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Lokalita"
+            className="pl-10"
+            value={location}
+            onChange={(e) => { setLocation(e.target.value); setPage(1); }}
           />
         </div>
         <select
@@ -156,5 +169,25 @@ export default function JobsPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/3" />
+          <div className="h-4 bg-gray-200 rounded w-1/2" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {[1,2,3,4,5,6].map((i) => (
+              <div key={i} className="h-48 bg-gray-200 rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    }>
+      <JobsContent />
+    </Suspense>
   );
 }

@@ -134,12 +134,12 @@ export default function CandidateDashboard() {
                         <p className="text-sm text-gray-500">{job.employer?.companyName}</p>
                       </div>
                       {job.matchScore >= 0 && (
-                        <div className={`flex-shrink-0 flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${
+                        <div className={`flex-shrink-0 flex items-center gap-2 rounded-full px-5 py-2.5 text-2xl font-bold ${
                           job.matchScore >= 70 ? 'bg-green-100 text-green-700' :
                           job.matchScore >= 40 ? 'bg-yellow-100 text-yellow-700' :
                           'bg-gray-100 text-gray-600'
                         }`}>
-                          <Star className="h-3 w-3" />
+                          <Star className="h-7 w-7" />
                           {job.matchScore}% match
                         </div>
                       )}

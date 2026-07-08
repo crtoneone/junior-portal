@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '**' },
     ],
   },
+  allowedDevOrigins: ['dev.dajflek.sk'],
 };
 
 export default nextConfig;

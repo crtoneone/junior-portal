@@ -13,7 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "JuniorPortal - Práca pre juniorov a stážistov",
-  description: "Nájdi svoju prvú prácu v IT. Ponuky pre juniorov, stážistov a absolventov.",
+  description: "Nájdi svoju prvú prácu. Ponuky pre juniorov, stážistov a absolventov.",
 };
 
 export default function RootLayout({

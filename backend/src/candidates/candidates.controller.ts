@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { CandidatesService } from './candidates.service';
 import { UpdateCandidateProfileDto } from './dto/update-candidate.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -39,6 +39,27 @@ export class CandidatesController {
   @Roles('CANDIDATE')
   async getSavedCvs(@CurrentUser('sub') userId: string) {
     return this.candidatesService.getSavedCvs(userId);
+  }
+
+  @Patch('cv/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CANDIDATE')
+  async updateCv(
+    @Param('id') id: string,
+    @CurrentUser('sub') userId: string,
+    @Body('cvData') cvData: any,
+  ) {
+    return this.candidatesService.updateCv(id, userId, cvData);
+  }
+
+  @Delete('cv/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CANDIDATE')
+  async deleteCv(
+    @Param('id') id: string,
+    @CurrentUser('sub') userId: string,
+  ) {
+    return this.candidatesService.deleteCv(id, userId);
   }
 
   @Post('saved-jobs/:jobId')

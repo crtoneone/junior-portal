@@ -17,6 +17,7 @@ model User {
   avatarUrl      String?
   phone          String?
   isVerified     Boolean  @default(false)
+  isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -26,6 +27,8 @@ model User {
   savedJobs        SavedJob[]
   notifications    Notification[]
   refreshTokens    RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+  savedSearches       SavedSearch[]
 }
 
 model CandidateProfile {
@@ -137,6 +140,38 @@ model SavedCv {
   @@map("saved_cvs")
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@map("password_reset_tokens")
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email     String
+  query     String?
+  type      String?
+  isRemote  Boolean?
+  location  String?
+  skills    String?
+  minSalary Int?
+  maxSalary Int?
+  frequency String   @default("daily")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("saved_searches")
+}
+
 model Notification {
   id        String   @id @default(cuid())
   userId    String
@@ -163,4 +198,19 @@ model Skill {
   name      String   @unique
   category  String?
   createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    String    @default("UNREAD")
+  reply     String?
+  repliedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("contact_messages")
 }

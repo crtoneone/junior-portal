@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/lib/auth';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
-import { Plus, X, Download, Eye } from 'lucide-react';
+import { Plus, X, Download, Eye, Trash2, RotateCcw } from 'lucide-react';
 import jsPDF from 'jspdf';
 
 interface CVData {
@@ -41,27 +41,68 @@ const emptyCV: CVData = {
 
 export default function CVBuilderPage() {
   const { user, token } = useAuth();
-  const [cv, setCV] = useState<CVData>({ ...emptyCV, personal: { ...emptyCV.personal, firstName: user?.firstName || '', lastName: user?.lastName || '', email: user?.email || '' } });
+  const [cv, setCV] = useState<CVData>(emptyCV);
+  const [cvId, setCvId] = useState<string | null>(null);
   const [preview, setPreview] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loadCV = async () => {
+      if (!token) { setLoading(false); return; }
+      try {
+        const saved = await api.get<any[]>('/candidates/cv', token);
+        if (saved.length > 0) {
+          const latest = saved[0];
+          setCvId(latest.id);
+          const data = typeof latest.cvData === 'string' ? JSON.parse(latest.cvData) : latest.cvData;
+          setCV({
+            personal: {
+              firstName: data.personal?.firstName || user?.firstName || '',
+              lastName: data.personal?.lastName || user?.lastName || '',
+              email: data.personal?.email || user?.email || '',
+              phone: data.personal?.phone || '',
+              location: data.personal?.location || '',
+              title: data.personal?.title || '',
+            },
+            summary: data.summary || '',
+            experience: data.experience || [],
+            education: data.education || [],
+            skills: data.skills || [],
+            languages: data.languages || [],
+            links: data.links || [],
+          });
+        } else {
+          setCV({ ...emptyCV, personal: { ...emptyCV.personal, firstName: user?.firstName || '', lastName: user?.lastName || '', email: user?.email || '' } });
+        }
+      } catch {
+        setCV({ ...emptyCV, personal: { ...emptyCV.personal, firstName: user?.firstName || '', lastName: user?.lastName || '', email: user?.email || '' } });
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCV();
+  }, [token, user]);
 
   const updatePersonal = (field: string, value: string) => {
     setCV({ ...cv, personal: { ...cv.personal, [field]: value } });
   };
 
-  const addItem = (section: 'experience' | 'education' | 'languages') => {
-    const newItem = { id: crypto.randomUUID(), company: '', position: '', startDate: '', endDate: '', description: '' };
-    if (section === 'education') Object.assign(newItem, { school: '', degree: '', field: '' });
-    if (section === 'languages') Object.assign(newItem, { language: '', level: '' });
-    setCV({ ...cv, [section]: [...cv[section], newItem as any] });
+  const addItem = (section: 'experience' | 'education' | 'languages' | 'links') => {
+    const newItem: any = { id: crypto.randomUUID() };
+    if (section === 'experience') Object.assign(newItem, { company: '', position: '', startDate: '', endDate: '', description: '' });
+    else if (section === 'education') Object.assign(newItem, { school: '', degree: '', field: '', startDate: '', endDate: '' });
+    else if (section === 'languages') Object.assign(newItem, { language: '', level: '' });
+    else if (section === 'links') Object.assign(newItem, { label: '', url: '' });
+    setCV({ ...cv, [section]: [...cv[section], newItem] });
   };
 
-  const removeItem = (section: 'experience' | 'education' | 'languages', id: string) => {
+  const removeItem = (section: 'experience' | 'education' | 'languages' | 'links', id: string) => {
     setCV({ ...cv, [section]: cv[section].filter((i) => i.id !== id) });
   };
 
-  const updateItem = (section: 'experience' | 'education' | 'languages', id: string, field: string, value: string) => {
+  const updateItem = (section: 'experience' | 'education' | 'languages' | 'links', id: string, field: string, value: string) => {
     setCV({ ...cv, [section]: cv[section].map((i) => (i.id === id ? { ...i, [field]: value } : i)) });
   };
 
@@ -71,6 +112,18 @@ export default function CVBuilderPage() {
     const s = [...cv.skills];
     s[i] = v;
     setCV({ ...cv, skills: s });
+  };
+
+  const validate = (): boolean => {
+    if (!cv.personal.firstName.trim() || !cv.personal.lastName.trim()) {
+      toast.error('Meno a priezvisko sú povinné');
+      return false;
+    }
+    if (!cv.personal.email.trim()) {
+      toast.error('Email je povinný');
+      return false;
+    }
+    return true;
   };
 
   const exportPDF = () => {
@@ -188,16 +241,40 @@ export default function CVBuilderPage() {
       });
     }
 
+    if (cv.links.filter(l => l.label && l.url).length) {
+      if (y > 260) { doc.addPage(); y = margin; }
+      doc.setFillColor(26, 26, 46);
+      doc.rect(margin, y - 4, pageWidth - 2 * margin, 0.5, 'F');
+      doc.setFont('helvetica', 'bold');
+      addText('ODKAZY', 11, true, '#1a1a2e');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      cv.links.forEach((link) => {
+        if (!link.label || !link.url) return;
+        if (y > 280) { doc.addPage(); y = margin; }
+        doc.setTextColor('#1a1a2e');
+        doc.text(`${link.label}: ${link.url}`, margin, y);
+        y += 5;
+      });
+    }
+
     doc.save('CV.pdf');
     toast.success('CV exportované ako PDF');
   };
 
   const saveCV = async () => {
     if (!token) return;
+    if (!validate()) return;
     setSaving(true);
     try {
-      await api.post('/candidates/cv/save', { cvData: cv }, token);
-      toast.success('CV uložené');
+      if (cvId) {
+        await api.patch(`/candidates/cv/${cvId}`, { cvData: cv }, token);
+        toast.success('CV aktualizované');
+      } else {
+        const result = await api.post<any>('/candidates/cv/save', { cvData: cv }, token);
+        setCvId(result.id);
+        toast.success('CV uložené');
+      }
     } catch {
       toast.error('Chyba pri ukladaní');
     } finally {
@@ -205,14 +282,49 @@ export default function CVBuilderPage() {
     }
   };
 
+  const deleteCV = async () => {
+    if (!token || !cvId) return;
+    if (!confirm('Naozaj chceš vymazať toto CV?')) return;
+    try {
+      await api.delete(`/candidates/cv/${cvId}`, token);
+      setCvId(null);
+      setCV({ ...emptyCV, personal: { ...emptyCV.personal, firstName: user?.firstName || '', lastName: user?.lastName || '', email: user?.email || '' } });
+      toast.success('CV vymazané');
+    } catch {
+      toast.error('Chyba pri mazaní');
+    }
+  };
+
+  const resetCV = () => {
+    if (!confirm('Naozaj chceš začať odznova? Tento krok sa nedá vrátiť.')) return;
+    setCvId(null);
+    setCV({ ...emptyCV, personal: { ...emptyCV.personal, firstName: user?.firstName || '', lastName: user?.lastName || '', email: user?.email || '' } });
+  };
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <div className="text-center text-gray-500">Načítavam...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">CV Builder</h1>
-          <p className="text-gray-500">Vytvor si profesionálne CV</p>
+          <p className="text-gray-500">{cvId ? 'Uprav svoje CV' : 'Vytvor si profesionálne CV'}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
+          {cvId && (
+            <Button variant="outline" onClick={deleteCV}>
+              <Trash2 className="h-4 w-4 mr-2" /> Vymazať
+            </Button>
+          )}
+          <Button variant="ghost" onClick={resetCV}>
+            <RotateCcw className="h-4 w-4 mr-2" /> Nové CV
+          </Button>
           <Button variant="outline" onClick={() => setPreview(!preview)}>
             <Eye className="h-4 w-4 mr-2" /> {preview ? 'Upraviť' : 'Náhľad'}
           </Button>
@@ -220,7 +332,7 @@ export default function CVBuilderPage() {
             <Download className="h-4 w-4 mr-2" /> Export PDF
           </Button>
           <Button onClick={saveCV} disabled={saving}>
-            {saving ? 'Ukladám...' : 'Uložiť CV'}
+            {saving ? 'Ukladám...' : cvId ? 'Aktualizovať CV' : 'Uložiť CV'}
           </Button>
         </div>
       </div>
@@ -235,7 +347,7 @@ export default function CVBuilderPage() {
                   <div><Label>Meno</Label><Input value={cv.personal.firstName} onChange={e => updatePersonal('firstName', e.target.value)} /></div>
                   <div><Label>Priezvisko</Label><Input value={cv.personal.lastName} onChange={e => updatePersonal('lastName', e.target.value)} /></div>
                 </div>
-                <div><Label>Email</Label><Input value={cv.personal.email} onChange={e => updatePersonal('email', e.target.value)} /></div>
+                <div><Label>Email</Label><Input type="email" value={cv.personal.email} onChange={e => updatePersonal('email', e.target.value)} /></div>
                 <div><Label>Telefón</Label><Input value={cv.personal.phone} onChange={e => updatePersonal('phone', e.target.value)} /></div>
                 <div><Label>Lokalita</Label><Input value={cv.personal.location} onChange={e => updatePersonal('location', e.target.value)} /></div>
                 <div><Label>Profesný titul</Label><Input value={cv.personal.title} onChange={e => updatePersonal('title', e.target.value)} placeholder="napr. Junior React Developer" /></div>
@@ -359,6 +471,26 @@ export default function CVBuilderPage() {
                 ))}
               </CardContent>
             </Card>
+
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-900">Odkazy</h3>
+                  <Button type="button" variant="outline" size="sm" onClick={() => addItem('links')}>
+                    <Plus className="h-4 w-4 mr-1" /> Pridať
+                  </Button>
+                </div>
+                {cv.links.map((link) => (
+                  <div key={link.id} className="flex gap-3 items-end relative">
+                    <div className="flex-1"><Label>Názov</Label><Input value={link.label} onChange={e => updateItem('links', link.id, 'label', e.target.value)} placeholder="napr. GitHub, LinkedIn" /></div>
+                    <div className="flex-[2]"><Label>URL</Label><Input value={link.url} onChange={e => updateItem('links', link.id, 'url', e.target.value)} placeholder="https://..." /></div>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeItem('links', link.id)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -426,10 +558,21 @@ export default function CVBuilderPage() {
                 )}
 
                 {cv.languages.length > 0 && (
-                  <div>
+                  <div className="mb-6">
                     <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Jazyky</h3>
                     {cv.languages.map((lang) => (
                       <p key={lang.id} className="text-sm text-gray-600">{lang.language} - {lang.level}</p>
+                    ))}
+                  </div>
+                )}
+
+                {cv.links.filter(l => l.label && l.url).length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Odkazy</h3>
+                    {cv.links.filter(l => l.label && l.url).map((link) => (
+                      <p key={link.id} className="text-sm text-blue-600">
+                        <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                      </p>
                     ))}
                   </div>
                 )}

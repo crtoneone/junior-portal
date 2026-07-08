@@ -105,6 +105,34 @@ async function main() {
     });
   }
 
+  await prisma.contactMessage.createMany({
+    data: [
+      {
+        name: 'Mária Horváthová',
+        email: 'maria@example.sk',
+        subject: 'Spolupráca s portálom',
+        message: 'Dobrý deň, som HR manažérka vo firme DataSoft. Radi by sme začali využívať JuniorPortal na nábor juniorov. Viete mi poskytnúť viac informácií o možnostiach spolupráce a cenových balíkoch? Ďakujem.',
+        status: 'UNREAD',
+      },
+      {
+        name: 'Igor Novák',
+        email: 'igor@example.sk',
+        subject: 'Chyba pri registrácii',
+        message: 'Dobrý deň, pri registrácii sa mi zobrazuje chyba, že email je už používaný, ale ja som si ešte nikdy účet nevytváral. Prosím o pomoc. Ďakujem.',
+        status: 'READ',
+      },
+      {
+        name: 'Lucia Kováčová',
+        email: 'lucia@example.sk',
+        subject: 'Návrh na vylepšenie',
+        message: 'Pekný deň, používam JuniorPortal ako kandidátka a chcela by som navrhnúť možnosť nahrať viacero verzií CV. Občas potrebujem poslať iné CV na rôzne pozície. Ďakujem za zváženie.',
+        status: 'REPLIED',
+        reply: 'Dobrý deň Lucia, ďakujeme za Váš návrh. Momentálne pracujeme na vylepšení CV Buildera, ktorý bude podporovať viacero verzií CV. Sledujte nás, čoskoro to spustíme.',
+        repliedAt: new Date('2026-06-18'),
+      },
+    ],
+  });
+
   console.log('Seed completed successfully');
   console.log('---');
   console.log('Admin: admin@juniorportal.sk / password123');

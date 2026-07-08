@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
+import { CreateGuestApplicationDto } from './dto/create-guest-application.dto';
 import { UpdateApplicationStatusDto } from './dto/update-status.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class ApplicationsService {
@@ -45,6 +47,76 @@ export class ApplicationsService {
 
     await this.notificationsService.create({
       userId,
+      title: 'Prihláška odoslaná',
+      message: `Tvoja prihláška na pozíciu "${job.title}" bola úspešne odoslaná.`,
+      type: 'success',
+      link: `/jobs/${job.id}`,
+    });
+
+    await this.notificationsService.create({
+      userId: job.employer.userId,
+      title: 'Nová prihláška',
+      message: `Niekto sa prihlásil na tvoju pozíciu "${job.title}".`,
+      type: 'info',
+      link: `/dashboard/employer/jobs/${job.id}/applications`,
+    });
+
+    return application;
+  }
+
+  async guestApply(dto: CreateGuestApplicationDto) {
+    const job = await this.prisma.job.findUnique({
+      where: { id: dto.jobId },
+      include: { employer: true },
+    });
+
+    if (!job) throw new NotFoundException('Job not found');
+    if (job.status !== 'ACTIVE') throw new NotFoundException('Job is no longer active');
+
+    let user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(2) + Date.now().toString(36), 12);
+      user = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          passwordHash: randomPassword,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          phone: dto.phone,
+          role: 'CANDIDATE',
+        },
+      });
+      await this.prisma.candidateProfile.create({
+        data: { userId: user.id },
+      });
+    }
+
+    const existing = await this.prisma.application.findUnique({
+      where: { userId_jobId: { userId: user.id, jobId: dto.jobId } },
+    });
+
+    if (existing) {
+      throw new ConflictException('Už si sa hlásil/a na túto pozíciu');
+    }
+
+    const application = await this.prisma.application.create({
+      data: {
+        userId: user.id,
+        jobId: dto.jobId,
+        coverLetter: dto.coverLetter,
+      },
+      include: {
+        job: {
+          select: { title: true, employer: { select: { companyName: true, userId: true } } },
+        },
+      },
+    });
+
+    await this.notificationsService.create({
+      userId: user.id,
       title: 'Prihláška odoslaná',
       message: `Tvoja prihláška na pozíciu "${job.title}" bola úspešne odoslaná.`,
       type: 'success',
