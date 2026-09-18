@@ -2,7 +2,12 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
-export type ThemeName = 'bauhaus2' | 'bauhaus-primar' | 'bauhaus-poster' | 'brutal' | 'brutal-dark' | 'brutal-signal';
+export type ThemeName =
+  | 'bauhaus2' | 'bauhaus-primar' | 'bauhaus-poster'
+  | 'brutal' | 'brutal-dark' | 'brutal-signal'
+  | 'acid' | 'acid-paper'
+  | 'vivid-split' | 'vivid-poster'
+  | 'swiss' | 'swiss-arc';
 
 interface ThemeContextType {
   theme: ThemeName;
@@ -11,7 +16,11 @@ interface ThemeContextType {
 
 const DEFAULT_THEME: ThemeName = 'brutal-signal';
 const THEME_KEY = 'jp-theme';
-const ALL_THEMES: ThemeName[] = ['brutal-signal', 'brutal', 'brutal-dark', 'bauhaus2', 'bauhaus-primar', 'bauhaus-poster'];
+const ALL_THEMES: ThemeName[] = [
+  'brutal-signal', 'brutal', 'brutal-dark',
+  'bauhaus2', 'bauhaus-primar', 'bauhaus-poster',
+  'acid', 'acid-paper', 'vivid-split', 'vivid-poster', 'swiss', 'swiss-arc',
+];
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: DEFAULT_THEME,

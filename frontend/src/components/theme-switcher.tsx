@@ -13,6 +13,12 @@ const OPTIONS: { key: ThemeName; label: string; route: string; desc: string }[] 
   { key: 'brutal', label: 'Brutal', route: '/landing-brutal', desc: 'Grid, mono, oranžová, rám' },
   { key: 'brutal-dark', label: 'Brutal Dark', route: '/landing-brutal-dark', desc: 'Čierna, biele linky, mono' },
   { key: 'brutal-signal', label: 'Brutal Signal', route: '/landing-brutal-signal', desc: 'Oranžový hero, tvrdý grid' },
+  { key: 'acid', label: 'Acid Dark', route: '/landing-acid', desc: 'Čierna, limetka, glóbus, nálepky' },
+  { key: 'acid-paper', label: 'Acid Paper', route: '/landing-acid-paper', desc: 'Krémový papier, fialová fotka' },
+  { key: 'vivid-split', label: 'Vivid Split', route: '/landing-vivid-split', desc: 'Magenta / tyrkys, duotone' },
+  { key: 'vivid-poster', label: 'Vivid Poster', route: '/landing-vivid-poster', desc: 'Plagátová stena, dlaždice' },
+  { key: 'swiss', label: 'Swiss Violet', route: '/landing-swiss', desc: 'Biela, fialový pás, ČB fotka' },
+  { key: 'swiss-arc', label: 'Swiss Arc', route: '/landing-swiss-arc', desc: 'Oblúk U, fialové plochy, kruhy' },
 ];
 
 export function ThemeSwitcher({ className, light }: { className?: string; light?: boolean }) {

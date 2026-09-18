@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, IBM_Plex_Mono, Fredoka, Archivo_Black, Inter_Tight } from "next/font/google";
+import { Inter, Space_Grotesk, IBM_Plex_Mono, Fredoka, Archivo_Black, Inter_Tight, Anton } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/theme";
@@ -35,6 +35,12 @@ const archivoBlack = Archivo_Black({
   variable: "--font-archivo-black",
 });
 
+const anton = Anton({
+  subsets: ["latin", "latin-ext"],
+  weight: "400",
+  variable: "--font-anton",
+});
+
 const interTight = Inter_Tight({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -52,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sk" className={`h-full antialiased ${spaceGrotesk.variable} ${ibmPlexMono.variable} ${fredoka.variable} ${archivoBlack.variable} ${interTight.variable}`}>
+    <html lang="sk" className={`h-full antialiased ${spaceGrotesk.variable} ${ibmPlexMono.variable} ${fredoka.variable} ${archivoBlack.variable} ${interTight.variable} ${anton.variable}`}>
       <body className={`${inter.className} min-h-full flex flex-col`}>
         <AuthProvider>
           <ThemeProvider>

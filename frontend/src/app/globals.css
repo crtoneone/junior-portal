@@ -193,6 +193,161 @@ body {
   --jp-nav-bg: #f2ead6;
 }
 
+/* ===== Acid family (anti-design poster: čierna/krém, limetka, fialová, mono) ===== */
+[data-theme='acid'],
+[data-theme='acid-paper'] {
+  --jp-font: var(--font-inter-tight), 'Inter Tight', 'Inter', Arial, sans-serif;
+  --jp-display-font: var(--font-anton), 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --jp-lime: #c8f542;
+  --jp-violet: #8c6fe6;
+  --jp-radius: 0px;
+  --jp-radius-lg: 0px;
+  --jp-shadow: none;
+  --jp-shadow-strong: none;
+  --jp-tt: uppercase;
+  --jp-ls: 0.01em;
+  --jp-border-w: 1px;
+}
+[data-theme='acid'] {
+  --jp-canvas: #0b0b0b;
+  --jp-bg: #0b0b0b;
+  --jp-surface: #161616;
+  --jp-text: #efe8d8;
+  --jp-muted: rgba(239, 232, 216, 0.6);
+  --jp-border: #efe8d8;
+  --jp-accent: #c8f542;
+  --jp-accent-hover: #d9ff5c;
+  --jp-accent-contrast: #0b0b0b;
+  --jp-accent-soft: rgba(200, 245, 66, 0.12);
+  --jp-accent-grad: #0b0b0b;
+  --jp-ink: #efe8d8;
+  --jp-ink-text: #0b0b0b;
+  --jp-signal: #c8f542;
+  --jp-nav-bg: #0b0b0b;
+}
+[data-theme='acid-paper'] {
+  --jp-canvas: #e9e3d6;
+  --jp-bg: #f1ece1;
+  --jp-surface: #e6dfcf;
+  --jp-text: #0b0b0b;
+  --jp-muted: rgba(11, 11, 11, 0.6);
+  --jp-border: #0b0b0b;
+  --jp-accent: #0b0b0b;
+  --jp-accent-hover: #2b2b2b;
+  --jp-accent-contrast: #c8f542;
+  --jp-accent-soft: rgba(11, 11, 11, 0.06);
+  --jp-accent-grad: #f1ece1;
+  --jp-ink: #0b0b0b;
+  --jp-ink-text: #f1ece1;
+  --jp-signal: #8c6fe6;
+  --jp-nav-bg: #f1ece1;
+}
+
+/* ===== Vivid family (gradient duotone plagáty: magenta, tyrkys, žltá, fialová) ===== */
+[data-theme='vivid-split'],
+[data-theme='vivid-poster'] {
+  --jp-font: var(--font-inter-tight), 'Inter Tight', 'Inter', Arial, sans-serif;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --jp-magenta: #c0157f;
+  --jp-teal: #17b8b0;
+  --jp-yellow: #f4c020;
+  --jp-violet: #5b2ea6;
+  --jp-radius: 0px;
+  --jp-radius-lg: 0px;
+  --jp-shadow: none;
+  --jp-shadow-strong: none;
+  --jp-tt: uppercase;
+  --jp-ls: -0.02em;
+  --jp-border-w: 0px;
+}
+[data-theme='vivid-split'] {
+  --jp-canvas: #0e0a14;
+  --jp-bg: #ffffff;
+  --jp-surface: #f5f1fa;
+  --jp-text: #140b1f;
+  --jp-muted: rgba(20, 11, 31, 0.62);
+  --jp-border: #140b1f;
+  --jp-accent: #c0157f;
+  --jp-accent-hover: #a10f69;
+  --jp-accent-contrast: #ffffff;
+  --jp-accent-soft: rgba(192, 21, 127, 0.1);
+  --jp-accent-grad: linear-gradient(90deg, #c0157f 0%, #17b8b0 100%);
+  --jp-ink: #140b1f;
+  --jp-ink-text: #ffffff;
+  --jp-signal: #f4c020;
+  --jp-nav-bg: #ffffff;
+}
+[data-theme='vivid-poster'] {
+  --jp-canvas: #0e0a14;
+  --jp-bg: #16101f;
+  --jp-surface: #1f1729;
+  --jp-text: #ffffff;
+  --jp-muted: rgba(255, 255, 255, 0.62);
+  --jp-border: rgba(255, 255, 255, 0.2);
+  --jp-accent: #f4c020;
+  --jp-accent-hover: #ffd23f;
+  --jp-accent-contrast: #140b1f;
+  --jp-accent-soft: rgba(244, 192, 32, 0.12);
+  --jp-accent-grad: linear-gradient(135deg, #5b2ea6 0%, #c0157f 100%);
+  --jp-ink: #ffffff;
+  --jp-ink-text: #140b1f;
+  --jp-signal: #17b8b0;
+  --jp-nav-bg: #16101f;
+}
+
+/* ===== Swiss family (editorial: biela, levanduľová fialová, ČB fotky, mono popisky) ===== */
+[data-theme='swiss'],
+[data-theme='swiss-arc'] {
+  --jp-font: var(--font-inter-tight), 'Inter Tight', 'Inter', Helvetica, Arial, sans-serif;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --jp-violet: #8f7cf5;
+  --jp-violet-deep: #4b2fe0;
+  --jp-radius: 0px;
+  --jp-radius-lg: 0px;
+  --jp-shadow: none;
+  --jp-shadow-strong: none;
+  --jp-tt: uppercase;
+  --jp-ls: 0.02em;
+  --jp-border-w: 1px;
+}
+[data-theme='swiss'] {
+  --jp-canvas: #efeef3;
+  --jp-bg: #ffffff;
+  --jp-surface: #f4f2fb;
+  --jp-text: #111111;
+  --jp-muted: rgba(17, 17, 17, 0.58);
+  --jp-border: #111111;
+  --jp-accent: #111111;
+  --jp-accent-hover: #333333;
+  --jp-accent-contrast: #ffffff;
+  --jp-accent-soft: rgba(143, 124, 245, 0.14);
+  --jp-accent-grad: #ffffff;
+  --jp-ink: #111111;
+  --jp-ink-text: #ffffff;
+  --jp-signal: #8f7cf5;
+  --jp-nav-bg: #ffffff;
+}
+[data-theme='swiss-arc'] {
+  --jp-canvas: #8f7cf5;
+  --jp-bg: #ffffff;
+  --jp-surface: #efecfd;
+  --jp-text: #111111;
+  --jp-muted: rgba(17, 17, 17, 0.58);
+  --jp-border: #111111;
+  --jp-accent: #8f7cf5;
+  --jp-accent-hover: #7a66ee;
+  --jp-accent-contrast: #111111;
+  --jp-accent-soft: rgba(143, 124, 245, 0.14);
+  --jp-accent-grad: #ffffff;
+  --jp-ink: #111111;
+  --jp-ink-text: #ffffff;
+  --jp-signal: #8f7cf5;
+  --jp-nav-bg: #ffffff;
+}
+
 /* ===== Brutal layout helpers (grid linky podľa témy) ===== */
 @utility bl-cell { border: var(--jp-border-w) solid var(--jp-border); }
 @utility bl-bt { border-top: var(--jp-border-w) solid var(--jp-border); }
@@ -205,6 +360,19 @@ body {
 .bl-mono { font-family: var(--jp-sec-font); text-transform: uppercase; letter-spacing: 0.04em; }
 .bl-arrow { display: inline-block; transition: transform 0.2s ease; }
 .group:hover .bl-arrow, a:hover > .bl-arrow, button:hover > .bl-arrow { transform: translate(3px, -3px); }
+
+/* duotone fotka: sivá + farebné prekrytie cez mix-blend */
+.duo-img { filter: grayscale(1) contrast(1.15); display: block; width: 100%; height: 100%; object-fit: cover; }
+.duo-overlay { mix-blend-mode: multiply; pointer-events: none; }
+.duo-overlay-screen { mix-blend-mode: screen; pointer-events: none; }
+.acid-display { font-family: var(--jp-display-font); text-transform: uppercase; line-height: 0.92; letter-spacing: 0.005em; font-weight: 400; }
+.acid-mono { font-family: var(--jp-sec-font); text-transform: uppercase; letter-spacing: 0.08em; }
+.barcode { background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 8px, currentColor 8px 11px, transparent 11px 13px); }
+.dot-grid { background-image: radial-gradient(currentColor 1.6px, transparent 1.7px); background-size: 14px 14px; }
+.vrl { writing-mode: vertical-rl; }
+.thin-arrow { display: inline-flex; align-items: center; }
+.thin-arrow::before { content: ''; display: inline-block; width: 48px; height: 1px; background: currentColor; }
+.thin-arrow::after { content: ''; display: inline-block; width: 8px; height: 8px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: translateX(-8px) rotate(45deg); }
 
 @keyframes bl-ticker {
   from { transform: translateX(0); }
