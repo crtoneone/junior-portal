@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'dev-backend',
-      cwd: '/srv/dev/backend',
+      cwd: '/srv/dajflek/dev/backend',
       script: 'dist/main.js',
       interpreter: '/root/.nvm/versions/node/v22.22.3/bin/node',
       env: {
@@ -19,9 +19,9 @@ module.exports = {
     },
     {
       name: 'dev-frontend',
-      cwd: '/srv/dev/frontend',
+      cwd: '/srv/dajflek/dev/frontend',
       script: 'node_modules/next/dist/bin/next',
-      args: 'dev -p 3000',
+      args: 'dev -p 3000 --webpack',
       interpreter: '/root/.nvm/versions/node/v22.22.3/bin/node',
       env: {
         NODE_ENV: 'development',

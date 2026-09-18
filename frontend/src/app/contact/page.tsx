@@ -60,7 +60,7 @@ export default function ContactPage() {
             <Mail className="w-5 h-5 text-blue-600 shrink-0" />
             <div>
               <p className="text-sm font-medium text-gray-900">Email</p>
-              <a href="mailto:info@juniorportal.sk" className="text-sm text-blue-600 hover:underline">info@juniorportal.sk</a>
+              <a href="mailto:info@dajflek.sk" className="text-sm text-blue-600 hover:underline">info@dajflek.sk</a>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50">

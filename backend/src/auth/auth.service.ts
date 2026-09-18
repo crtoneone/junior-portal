@@ -57,7 +57,7 @@ export class AuthService {
 
     await this.notificationsService.create({
       userId: user.id,
-      title: 'Vitaj v JuniorPortáli!',
+      title: 'Vitaj v DajFleku!',
       message: dto.role === 'CANDIDATE'
         ? 'Vitaj! Začni vyplnením svojho profilu a CV, potom sa môžeš hlásiť na ponuky.'
         : 'Vitaj! Vyplň profil svojej firmy a pridaj prvé pracovné ponuky.',
@@ -269,7 +269,7 @@ export class AuthService {
       });
       await this.notificationsService.create({
         userId: user.id,
-        title: 'Vitaj v JuniorPortáli!',
+        title: 'Vitaj v DajFleku!',
         message: 'Účet bol vytvorený cez sociálnu sieť. Vyplň si profil a začni sa hlásiť na ponuky.',
         type: 'info',
         link: '/profile',

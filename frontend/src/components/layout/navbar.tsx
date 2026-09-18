@@ -2,13 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export function Navbar() {
   const { user, logout, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/landing-')) return null;
 
   const navLinks = (
     <>
@@ -21,30 +26,7 @@ export function Navbar() {
       <Link href="/contact" className="text-base text-white/80 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
         Kontakt
       </Link>
-      <Link href="/landing-ai" className="text-base text-[#DCEF62] hover:text-[#DCEF62]/80 transition-colors font-medium" onClick={() => setMobileOpen(false)}>
-        AI
-      </Link>
-      <Link href="/landing-spatial" className="text-base text-[#8B7CF7] hover:text-[#8B7CF7]/80 transition-colors font-medium" onClick={() => setMobileOpen(false)}>
-        Spatial
-      </Link>
-      <Link href="/landing-brutalist" className="text-base text-[#00ff41] hover:text-[#00ff41]/80 transition-colors font-bold" onClick={() => setMobileOpen(false)}>
-        Brutal
-      </Link>
-      <Link href="/landing-tactile" className="text-base text-[#FF6B35] hover:text-[#FF6B35]/80 transition-colors font-medium" onClick={() => setMobileOpen(false)}>
-        Tactile
-      </Link>
-      <Link href="/landing-calm" className="text-base text-white/60 hover:text-white/80 transition-colors" onClick={() => setMobileOpen(false)}>
-        Calm
-      </Link>
-      <Link href="/landing-corporate" className="text-base text-blue-400 hover:text-blue-300 transition-colors" onClick={() => setMobileOpen(false)}>
-        Corporate
-      </Link>
-      <Link href="/landing-futuristic" className="text-base text-cyan-400 hover:text-cyan-300 transition-colors" onClick={() => setMobileOpen(false)}>
-        Futuristic
-      </Link>
-      <Link href="/landing-vibrant" className="text-base text-[#FF4757] hover:text-[#FF4757]/80 transition-colors font-bold" onClick={() => setMobileOpen(false)}>
-        Vibrant
-      </Link>
+      <ThemeSwitcher light />
     </>
   );
 

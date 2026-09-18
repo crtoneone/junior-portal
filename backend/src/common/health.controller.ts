@@ -6,7 +6,7 @@ export class HealthController {
   getHealth() {
     return {
       status: 'ok',
-      name: 'JuniorPortal API',
+      name: 'DajFlek API',
       version: '1.0.0',
       timestamp: new Date().toISOString(),
       endpoints: {

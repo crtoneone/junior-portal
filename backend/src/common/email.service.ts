@@ -24,7 +24,7 @@ export class EmailService {
     if (this.transporter) {
       try {
         await this.transporter.sendMail({
-          from: process.env.SMTP_FROM || 'noreply@juniorportal.sk',
+          from: process.env.SMTP_FROM || 'noreply@dajflek.sk',
           ...options,
         });
       } catch (err) {
@@ -39,7 +39,7 @@ export class EmailService {
   async sendPasswordReset(email: string, link: string) {
     await this.send({
       to: email,
-      subject: 'Obnova hesla - JuniorPortal',
+      subject: 'Obnova hesla - DajFlek',
       text: `Pre obnovu hesla klikni na nasledujúci odkaz: ${link}\n\nPlatnosť odkazu je 1 hodina.\n\nAk si nežiadal/a o obnovu hesla, ignoruj tento email.`,
       html: `
         <h2>Obnova hesla</h2>
@@ -60,13 +60,13 @@ export class EmailService {
 
     await this.send({
       to: email,
-      subject: `Nové ponuky na JuniorPortáli (${jobs.length})`,
+      subject: `Nové ponuky na DajFleku (${jobs.length})`,
       text: `Nové pracovné ponuky:\n\n${jobs.map(j => `${j.title} - ${j.company} (${j.location}): ${j.link}`).join('\n')}`,
       html: `
         <h2 style="color:#1a1a2e;">Nové pracovné ponuky</h2>
         <p style="color:#666;">Našli sme ${jobs.length} nových ponúk podľa tvojich kritérií:</p>
         ${jobsHtml}
-        <p style="color:#999;font-size:12px;margin-top:16px;">Tento email bol odoslaný na základe tvojho uloženého vyhľadávania na JuniorPortáli.</p>
+        <p style="color:#999;font-size:12px;margin-top:16px;">Tento email bol odoslaný na základe tvojho uloženého vyhľadávania na DajFleku.</p>
       `,
     });
   }

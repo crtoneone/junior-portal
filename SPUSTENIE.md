@@ -1,4 +1,4 @@
-# JuniorPortal - Job portal pre juniorov
+# DajFlek - Job portal pre juniorov
 
 ## Struktura
 ```
@@ -30,7 +30,7 @@ setsid npx next dev -p 3000 < /dev/null > /tmp/frontend.log 2>&1 &
 ## Testovacie ucty
 | Rola | Email | Heslo |
 |------|-------|-------|
-| Admin | admin@juniorportal.sk | password123 |
+| Admin | admin@dajflek.sk | password123 |
 | Kandidat | kandidat@example.sk | password123 |
 | Zamestnavatel | firma@example.sk | password123 |
 

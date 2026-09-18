@@ -1,47 +1,24 @@
-# Project context
+# AGENTS.md — dajflek dev (`/srv/dev`)
 
-Toto je job portal pre juniorov. Backend NestJS na porte 4000, frontend Next.js na porte 3000. Databaza SQLite.
+## Commands
+- Backend dev: `cd /srv/dev/backend && npm run dev` — NestJS on `localhost:4000`
+- Frontend dev: `cd /srv/dev/frontend && npm run dev` — Next.js on `localhost:3000`
+- Rebuild backend: `cd /srv/dev/backend && rm -rf dist tsconfig.tsbuildinfo && npx tsc`
+- Seed: `cd /srv/dev/backend && npx prisma db seed`
+- PM2 (running on server): `dev-backend` (`/srv/dev/backend/dist/main.js`) a `dev-frontend` (`next dev -p 3000`), logy v `/tmp/dev-*-*.log`
+- Docker stack (alternatíva): `docker compose -f /srv/dev/docker-compose.yml up --build` — PostgreSQL 5432, backend 4000, frontend 3000
 
-## Co bolo spravene (2026-06-07)
-- Prechod z PostgreSQL na SQLite (kvoli chybajucej databaze na systeme)
-- Fixnute circular dependencies v moduloch (global JwtModule)
-- Skills, requirements, responsibilities ulozene ako JSON string namiesto array (SQLite limitation)
-- JSON serializacia/deserializacia v jobs.service.ts a candidates.service.ts
-- Vytvorene chybajuce stranky:
-  - /dashboard/employer/profile (employer profil edit)
-  - /dashboard/employer/jobs/[id]/edit (edit job)
-  - /auth/candidate, /auth/employer (presmerovacie stranky)
-  - /cv (jednoducha CV stranka)
-- Pridane linky v employer dashboard headeri na profil, v candidate dashboard na profil a CV
+## Architektúra
+- Frontend: Next.js 16 App Router v `/srv/dev/frontend/src/app`. Backend: NestJS v `/srv/dev/backend/src`.
+- API prefix: `/api` (`app.setGlobalPrefix('api')`).
+- DB: Prisma + SQLite (`/srv/dev/backend/prisma/junior_portal.db`). `db push` sa používa namiesto migrácií.
+- CORS backend: dynamicky z `FRONTEND_URL` env; lokálne fallback `http://localhost:3000`.
+- Frontend API URL: `NEXT_PUBLIC_API_URL` env; lokálne `http://localhost:4000/api`.
+- `next.config.ts` má `allowedDevOrigins: ['dev.dajflek.sk']`.
 
-## Co bolo spravene (2026-06-19) — Admin Backoffice + Contact
-- **Backend**: Pridany `ContactMessage` model (schema, module, controller, service)
-- **Backend**: Rozsireny Admin modul (users CRUD, jobs CRUD, skills CRUD, contact messages)
-- **Backend**: Pridany `isActive` field na User (soft-block)
-- **Seed**: Pridane 3 sample kontaktne spravy (UNREAD, READ, REPLIED)
-- **Frontend**: Admin Layout so sidebarom (collapsible, unread count badge)
-- **Frontend**: Admin Dashboard s rozsirenymi statistikami a trendami
-- **Frontend**: Admin Users (fulltext search, filter podla role, verify/block/delete)
-- **Frontend**: Admin Jobs (search, filter podla statusu, close/activate/delete)
-- **Frontend**: Admin Skills (CRUD, grouped by category)
-- **Frontend**: Admin Messages (inbox s filtrom, detail s odpovedou)
-- **Frontend**: Public `/contact` stranka s kontaktnym formularom
-- **Frontend**: Contact CTA sekcia na landing page
-- **Navbar**: Pridany "Kontakt" link, admin friendly links
-
-## Ako spustit
-- Backend: `cd ~/portal/backend && setsid node dist/main.js < /dev/null > /tmp/backend.log 2>&1 &`
-- Frontend: `cd ~/portal/frontend && setsid npx next dev -p 3000 < /dev/null > /tmp/frontend.log 2>&1 &`
-- Po zmene kodu: `cd ~/portal/backend && rm -rf dist tsconfig.tsbuildinfo && npx tsc` (backend)
-- Seed: `cd ~/portal/backend && npx prisma db seed`
-
-## Testovacie ucty
-- admin@juniorportal.sk / password123 (ADMIN)
-- kandidat@example.sk / password123 (CANDIDATE)
-- firma@example.sk / password123 (EMPLOYER)
-
-## Este chyba
-- Notification triggers (create notifikacie pri aplikacii/status change)
-- Token refresh na frontende (auto-refresh pri 401)
-- Skill API (CRUD endpointy pre Skill model)
-- CV builder (kompletna funkcionalita)
+## Dôležité konvencie / gotchy
+- Pole pre skills, requirements, responsibilities sú v DB ako `String` (`@default("[]")`). Pri práci s nimi treba JSON parse/stringify v službách.
+- `User.role` enum formou stringu: `CANDIDATE`, `EMPLOYER`, `ADMIN`. `isActive` = soft-block.
+- Landingové verzie sú v `/srv/dev/frontend/src/app/landing-*` (acid, ai, antidesign, bauhaus, brutalist, corporate, futuristic, spatial, tactile, vibrant, webbrutality, y2k). Neupravuj `page.tsx` pre nové landingy — pridávaj samostatný priečinok/routu.
+- Uploads: backend Multer, statické `/uploads` cez Express.
+- Žiadne `.env` súbory nie sú v repozitári; nastavenia ísť cez PM2 env alebo docker-compose.

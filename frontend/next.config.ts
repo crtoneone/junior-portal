@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     ],
   },
   allowedDevOrigins: ['dev.dajflek.sk'],
+  turbopack: {},
 };
 
 export default nextConfig;
