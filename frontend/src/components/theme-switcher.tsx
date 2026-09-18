@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 
 const OPTIONS: { key: ThemeName; label: string; route: string; desc: string }[] = [
   { key: 'bauhaus2', label: 'Bauhaus 2', route: '/landing-bauhaus2', desc: 'Brutalizmus + kajamlabs' },
+  { key: 'bauhaus-primar', label: 'Bauhaus Primár', route: '/landing-bauhaus-primar', desc: 'Červená, žltá, modrá, tvary' },
+  { key: 'bauhaus-poster', label: 'Bauhaus Poster', route: '/landing-bauhaus-poster', desc: 'Plagát, bočný pás, schody' },
   { key: 'brutal', label: 'Brutal', route: '/landing-brutal', desc: 'Grid, mono, oranžová, rám' },
   { key: 'brutal-dark', label: 'Brutal Dark', route: '/landing-brutal-dark', desc: 'Čierna, biele linky, mono' },
   { key: 'brutal-signal', label: 'Brutal Signal', route: '/landing-brutal-signal', desc: 'Oranžový hero, tvrdý grid' },

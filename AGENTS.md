@@ -19,6 +19,6 @@
 ## Dôležité konvencie / gotchy
 - Pole pre skills, requirements, responsibilities sú v DB ako `String` (`@default("[]")`). Pri práci s nimi treba JSON parse/stringify v službách.
 - `User.role` enum formou stringu: `CANDIDATE`, `EMPLOYER`, `ADMIN`. `isActive` = soft-block.
-- Landingové témy sú v `frontend/src/app/landing-*`: `bauhaus2` (zdieľaný `components/landing/landing-page.tsx`) a tri brutal iterácie `brutal`, `brutal-dark`, `brutal-signal` (`components/landing/brutal-landing.tsx`, variant cez prop). Tokeny tém v `globals.css` (`[data-theme=...]`), zoznam v `lib/theme.tsx` + `components/theme-switcher.tsx`. Neupravuj `page.tsx` pre nové landingy — pridávaj samostatný priečinok/routu.
+- Landingové témy sú v `frontend/src/app/landing-*`: `bauhaus2` (zdieľaný `components/landing/landing-page.tsx`), dve Bauhaus iterácie `bauhaus-primar`, `bauhaus-poster` (`components/landing/bauhaus-landing.tsx`) a tri brutal iterácie `brutal`, `brutal-dark`, `brutal-signal` (`components/landing/brutal-landing.tsx`, variant cez prop). Tokeny tém v `globals.css` (`[data-theme=...]`), zoznam v `lib/theme.tsx` + `components/theme-switcher.tsx`. Neupravuj `page.tsx` pre nové landingy — pridávaj samostatný priečinok/routu.
 - Uploads: backend Multer, statické `/uploads` cez Express.
 - Žiadne `.env` súbory nie sú v repozitári; nastavenia ísť cez PM2 env alebo docker-compose.

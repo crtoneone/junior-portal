@@ -111,6 +111,55 @@ body {
   --jp-nav-bg: #f7f4ee;
 }
 
+/* ===== Bauhaus family (primárne farby, geometria, hrubé linky) ===== */
+[data-theme='bauhaus-primar'],
+[data-theme='bauhaus-poster'] {
+  --jp-font: var(--font-space-grotesk), 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --jp-red: #e0301e;
+  --jp-yellow: #f5c518;
+  --jp-blue: #1d4ed8;
+  --jp-radius: 0px;
+  --jp-radius-lg: 0px;
+  --jp-shadow: none;
+  --jp-shadow-strong: none;
+  --jp-tt: uppercase;
+  --jp-ls: -0.02em;
+}
+
+/* Bauhaus Primár: biela, čierne 3px linky, akcent červená */
+[data-theme='bauhaus-primar'] {
+  --jp-accent: #e0301e;
+  --jp-accent-hover: #b8240f;
+  --jp-accent-contrast: #ffffff;
+  --jp-accent-soft: rgba(224, 48, 30, 0.08);
+  --jp-accent-grad: #ffffff;
+  --jp-bg: #ffffff;
+  --jp-surface: #f3f1ea;
+  --jp-text: #111111;
+  --jp-muted: rgba(17, 17, 17, 0.6);
+  --jp-border: #111111;
+  --jp-border-w: 3px;
+  --jp-nav-bg: #ffffff;
+}
+
+/* Bauhaus Poster: krémový papier, čierna dominuje, akcent žltá */
+[data-theme='bauhaus-poster'] {
+  --jp-accent: #f5c518;
+  --jp-accent-hover: #e0b000;
+  --jp-accent-contrast: #111111;
+  --jp-accent-soft: rgba(245, 197, 24, 0.18);
+  --jp-accent-grad: #f2ead6;
+  --jp-bg: #f2ead6;
+  --jp-surface: #e9dfc4;
+  --jp-text: #111111;
+  --jp-muted: rgba(17, 17, 17, 0.6);
+  --jp-border: #111111;
+  --jp-border-w: 4px;
+  --jp-nav-bg: #f2ead6;
+}
+
 /* ===== Brutal layout helpers (grid linky podľa témy) ===== */
 @utility bl-cell { border: var(--jp-border-w) solid var(--jp-border); }
 @utility bl-bt { border-top: var(--jp-border-w) solid var(--jp-border); }
