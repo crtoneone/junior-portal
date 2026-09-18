@@ -28,8 +28,11 @@ function SocialAuthContent() {
   }, [searchParams, router]);
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <p className="text-gray-500">{status}</p>
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+      <div className="border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] p-8 text-center max-w-md w-full">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent mx-auto mb-4" />
+        <p className="bl-mono text-[13px] text-[var(--jp-text)]">{status}</p>
+      </div>
     </div>
   );
 }
@@ -37,8 +40,11 @@ function SocialAuthContent() {
 export default function SocialAuthPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <p className="text-gray-500">Spracúvam prihlásenie...</p>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] p-8 text-center max-w-md w-full">
+          <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent mx-auto mb-4" />
+          <p className="bl-mono text-[13px] text-[var(--jp-text)]">Spracúvam prihlásenie...</p>
+        </div>
       </div>
     }>
       <SocialAuthContent />

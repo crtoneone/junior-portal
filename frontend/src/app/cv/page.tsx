@@ -303,18 +303,20 @@ export default function CVBuilderPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        <div className="text-center text-gray-500">Načítavam...</div>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="bg-[var(--jp-canvas)] min-h-[calc(100vh-4rem)]">
+      <div className="mx-auto max-w-6xl px-3 sm:px-6 lg:px-10 py-10">
+      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">CV Builder</h1>
-          <p className="text-gray-500">{cvId ? 'Uprav svoje CV' : 'Vytvor si profesionálne CV'}</p>
+          <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-2">05 / Tvoj dokument</p>
+          <h1 className="bl-display text-4xl">CV <span className="text-[var(--jp-signal)]">Builder.</span></h1>
+          <p className="bl-mono mt-2 text-[12px] text-[var(--jp-muted)]">{cvId ? 'Uprav svoje CV' : 'Vytvor si profesionálne CV'}</p>
         </div>
         <div className="flex gap-2">
           {cvId && (
@@ -342,7 +344,7 @@ export default function CVBuilderPage() {
           <div className="space-y-6">
             <Card>
               <CardContent className="p-6 space-y-4">
-                <h3 className="font-semibold text-gray-900">Osobné údaje</h3>
+                <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Osobné údaje</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div><Label>Meno</Label><Input value={cv.personal.firstName} onChange={e => updatePersonal('firstName', e.target.value)} /></div>
                   <div><Label>Priezvisko</Label><Input value={cv.personal.lastName} onChange={e => updatePersonal('lastName', e.target.value)} /></div>
@@ -356,7 +358,7 @@ export default function CVBuilderPage() {
 
             <Card>
               <CardContent className="p-6 space-y-4">
-                <h3 className="font-semibold text-gray-900">Profesionálny súhrn</h3>
+                <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Profesionálny súhrn</h3>
                 <Textarea value={cv.summary} onChange={e => setCV({ ...cv, summary: e.target.value })} rows={4} placeholder="Stručne o tebe, tvoje ciele a čo hľadáš..." />
               </CardContent>
             </Card>
@@ -364,13 +366,13 @@ export default function CVBuilderPage() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Prax</h3>
+                  <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Prax</h3>
                   <Button type="button" variant="outline" size="sm" onClick={() => addItem('experience')}>
                     <Plus className="h-4 w-4 mr-1" /> Pridať
                   </Button>
                 </div>
                 {cv.experience.map((exp) => (
-                  <div key={exp.id} className="p-4 border rounded-lg space-y-3 relative">
+                  <div key={exp.id} className="p-4 border-2 border-[var(--jp-border)] space-y-3 relative">
                     <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeItem('experience', exp.id)}>
                       <X className="h-4 w-4" />
                     </Button>
@@ -391,13 +393,13 @@ export default function CVBuilderPage() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Vzdelanie</h3>
+                  <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Vzdelanie</h3>
                   <Button type="button" variant="outline" size="sm" onClick={() => addItem('education')}>
                     <Plus className="h-4 w-4 mr-1" /> Pridať
                   </Button>
                 </div>
                 {cv.education.map((edu) => (
-                  <div key={edu.id} className="p-4 border rounded-lg space-y-3 relative">
+                  <div key={edu.id} className="p-4 border-2 border-[var(--jp-border)] space-y-3 relative">
                     <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeItem('education', edu.id)}>
                       <X className="h-4 w-4" />
                     </Button>
@@ -418,21 +420,21 @@ export default function CVBuilderPage() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Zručnosti</h3>
+                  <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Zručnosti</h3>
                   <Button type="button" variant="outline" size="sm" onClick={addSkill}>
                     <Plus className="h-4 w-4 mr-1" /> Pridať
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {cv.skills.map((skill, i) => (
-                    <div key={i} className="flex items-center gap-1 bg-blue-50 rounded-full px-3 py-1">
+                    <div key={i} className="flex items-center gap-1 border-2 border-[var(--jp-border)] bg-[var(--jp-signal)] px-3 py-1.5">
                       <Input
                         value={skill}
                         onChange={e => updateSkill(i, e.target.value)}
                         className="h-6 w-24 border-0 bg-transparent p-0 text-sm focus:ring-0"
                         placeholder="skill"
                       />
-                      <button onClick={() => removeSkill(i)} className="text-gray-400 hover:text-red-500">
+                      <button onClick={() => removeSkill(i)} className="text-[var(--jp-ink)] hover:text-black">
                         <X className="h-3 w-3" />
                       </button>
                     </div>
@@ -444,7 +446,7 @@ export default function CVBuilderPage() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Jazyky</h3>
+                  <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Jazyky</h3>
                   <Button type="button" variant="outline" size="sm" onClick={() => addItem('languages')}>
                     <Plus className="h-4 w-4 mr-1" /> Pridať
                   </Button>
@@ -454,7 +456,7 @@ export default function CVBuilderPage() {
                     <div className="flex-1"><Label>Jazyk</Label><Input value={lang.language} onChange={e => updateItem('languages', lang.id, 'language', e.target.value)} /></div>
                     <div className="flex-1">
                       <Label>Úroveň</Label>
-                      <select className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm" value={lang.level} onChange={e => updateItem('languages', lang.id, 'level', e.target.value)}>
+                      <select className="bl-mono h-10 w-full border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] px-3 text-sm" value={lang.level} onChange={e => updateItem('languages', lang.id, 'level', e.target.value)}>
                         <option value="">--</option>
                         <option value="A1 - Začiatočník">A1 - Začiatočník</option>
                         <option value="A2 - Mierne pokročilý">A2 - Mierne pokročilý</option>
@@ -475,7 +477,7 @@ export default function CVBuilderPage() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Odkazy</h3>
+                  <h3 className="font-bold uppercase text-sm text-[var(--jp-text)]">Odkazy</h3>
                   <Button type="button" variant="outline" size="sm" onClick={() => addItem('links')}>
                     <Plus className="h-4 w-4 mr-1" /> Pridať
                   </Button>
@@ -496,36 +498,36 @@ export default function CVBuilderPage() {
 
         {preview && (
           <div ref={previewRef} className="lg:sticky lg:top-24 self-start">
-            <Card className="shadow-lg">
+            <Card className="border-2 border-[var(--jp-border)]">
               <CardContent className="p-8">
                 <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">{cv.personal.firstName} {cv.personal.lastName}</h2>
-                  {cv.personal.title && <p className="text-blue-600 font-medium">{cv.personal.title}</p>}
-                  <p className="text-sm text-gray-500 mt-1">
+                  <h2 className="text-2xl font-bold text-[var(--jp-text)]">{cv.personal.firstName} {cv.personal.lastName}</h2>
+                  {cv.personal.title && <p className="font-bold bl-mono text-[var(--jp-signal)]">{cv.personal.title}</p>}
+                  <p className="bl-mono text-xs text-[var(--jp-muted)] mt-1">
                     {[cv.personal.email, cv.personal.phone, cv.personal.location].filter(Boolean).join(' | ')}
                   </p>
                 </div>
 
                 {cv.summary && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-2">O mne</h3>
-                    <p className="text-sm text-gray-600">{cv.summary}</p>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-2">O mne</h3>
+                    <p className="text-sm text-[var(--jp-text)]">{cv.summary}</p>
                   </div>
                 )}
 
                 {cv.experience.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Prax</h3>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-3">Prax</h3>
                     {cv.experience.map((exp) => (
                       <div key={exp.id} className="mb-4">
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="font-medium text-gray-900">{exp.position}</p>
-                            <p className="text-sm text-gray-500">{exp.company}</p>
+                            <p className="font-medium text-[var(--jp-text)]">{exp.position}</p>
+                            <p className="text-sm text-[var(--jp-muted)]">{exp.company}</p>
                           </div>
-                          <p className="text-xs text-gray-400">{exp.startDate} - {exp.endDate || 'súčasnosť'}</p>
+                          <p className="bl-mono text-xs text-[var(--jp-muted)]">{exp.startDate} - {exp.endDate || 'súčasnosť'}</p>
                         </div>
-                        {exp.description && <p className="text-sm text-gray-600 mt-1">{exp.description}</p>}
+                        {exp.description && <p className="text-sm text-[var(--jp-text)] mt-1">{exp.description}</p>}
                       </div>
                     ))}
                   </div>
@@ -533,14 +535,14 @@ export default function CVBuilderPage() {
 
                 {cv.education.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Vzdelanie</h3>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-3">Vzdelanie</h3>
                     {cv.education.map((edu) => (
                       <div key={edu.id} className="mb-3">
                         <div className="flex justify-between">
-                          <p className="font-medium text-gray-900">{edu.school}</p>
-                          <p className="text-xs text-gray-400">{edu.startDate} - {edu.endDate || 'súčasnosť'}</p>
+                          <p className="font-medium text-[var(--jp-text)]">{edu.school}</p>
+                          <p className="bl-mono text-xs text-[var(--jp-muted)]">{edu.startDate} - {edu.endDate || 'súčasnosť'}</p>
                         </div>
-                        <p className="text-sm text-gray-500">{edu.degree}{edu.field ? ` - ${edu.field}` : ''}</p>
+                        <p className="text-sm text-[var(--jp-muted)]">{edu.degree}{edu.field ? ` - ${edu.field}` : ''}</p>
                       </div>
                     ))}
                   </div>
@@ -548,10 +550,10 @@ export default function CVBuilderPage() {
 
                 {cv.skills.filter(Boolean).length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Zručnosti</h3>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-3">Zručnosti</h3>
                     <div className="flex flex-wrap gap-2">
                       {cv.skills.filter(Boolean).map((s, i) => (
-                        <span key={i} className="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">{s}</span>
+                        <span key={i} className="border-2 border-[var(--jp-border)] bg-[var(--jp-signal)] text-[var(--jp-ink)] bl-mono text-xs font-bold px-2.5 py-1">{s}</span>
                       ))}
                     </div>
                   </div>
@@ -559,18 +561,18 @@ export default function CVBuilderPage() {
 
                 {cv.languages.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Jazyky</h3>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-3">Jazyky</h3>
                     {cv.languages.map((lang) => (
-                      <p key={lang.id} className="text-sm text-gray-600">{lang.language} - {lang.level}</p>
+                      <p key={lang.id} className="text-sm text-[var(--jp-text)]">{lang.language} - {lang.level}</p>
                     ))}
                   </div>
                 )}
 
                 {cv.links.filter(l => l.label && l.url).length > 0 && (
                   <div>
-                    <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-3">Odkazy</h3>
+                    <h3 className="bl-mono text-xs font-bold uppercase text-[var(--jp-muted)] tracking-wider mb-3">Odkazy</h3>
                     {cv.links.filter(l => l.label && l.url).map((link) => (
-                      <p key={link.id} className="text-sm text-blue-600">
+                      <p key={link.id} className="text-sm text-[var(--jp-signal)] font-bold">
                         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
                       </p>
                     ))}
@@ -580,6 +582,7 @@ export default function CVBuilderPage() {
             </Card>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

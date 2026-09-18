@@ -31,18 +31,21 @@ export default function EmployerDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-[var(--jp-canvas)]">
+    <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-10 py-8">
+      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Vitaj, {user?.firstName}!</h1>
-          <p className="text-gray-500">Prehľad tvojich ponúk</p>
+          <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-2 flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Prehľad tvojich ponúk
+          </p>
+          <h1 className="bl-display text-4xl">Vitaj, <span className="text-[var(--jp-signal)]">{user?.firstName}</span>!</h1>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/dashboard/employer/profile">
@@ -57,58 +60,52 @@ export default function EmployerDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-blue-100 p-3">
-                <Briefcase className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalJobs || 0}</p>
-                <p className="text-sm text-gray-500">Celkom ponúk</p>
-              </div>
+      <div className="grid grid-cols-1 gap-[2px] sm:grid-cols-2 lg:grid-cols-4 mb-8 bg-[var(--jp-border)] border-2 border-[var(--jp-border)]">
+        <div className="bg-[var(--jp-bg)] p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="bl-display text-4xl text-[var(--jp-signal)]">{stats?.totalJobs || 0}</p>
+              <p className="bl-mono mt-2 text-[11px] text-[var(--jp-muted)]">Celkom ponúk</p>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-green-100 p-3">
-                <Eye className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stats?.activeJobs || 0}</p>
-                <p className="text-sm text-gray-500">Aktívne</p>
-              </div>
+            <div className="p-3 border-2 border-[var(--jp-border)]">
+              <Briefcase className="h-5 w-5" />
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-purple-100 p-3">
-                <Users className="h-5 w-5 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalApplications || 0}</p>
-                <p className="text-sm text-gray-500">Prihlášky</p>
-              </div>
+          </div>
+        </div>
+        <div className="bg-[var(--jp-bg)] p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="bl-display text-4xl text-[var(--jp-signal)]">{stats?.activeJobs || 0}</p>
+              <p className="bl-mono mt-2 text-[11px] text-[var(--jp-muted)]">Aktívne</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="p-3 border-2 border-[var(--jp-border)]">
+              <Eye className="h-5 w-5" />
+            </div>
+          </div>
+        </div>
+        <div className="bg-[var(--jp-bg)] p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="bl-display text-4xl text-[var(--jp-signal)]">{stats?.totalApplications || 0}</p>
+              <p className="bl-mono mt-2 text-[11px] text-[var(--jp-muted)]">Prihlášky</p>
+            </div>
+            <div className="p-3 border-2 border-[var(--jp-border)]">
+              <Users className="h-5 w-5" />
+            </div>
+          </div>
+        </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Tvoje ponuky</CardTitle>
+          <CardTitle className="text-lg uppercase">Tvoje ponuky</CardTitle>
         </CardHeader>
         <CardContent>
           {jobs.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <p className="text-lg font-medium mb-2">Zatiaľ nemáš žiadne ponuky</p>
-              <p className="text-sm mb-6">Vytvor svoju prvú ponuku a nájdi juniora do tímu.</p>
+            <div className="text-center py-12 text-[var(--jp-muted)]">
+              <Briefcase className="h-12 w-12 mx-auto mb-4 text-[var(--jp-border)]" />
+              <p className="text-lg font-bold uppercase mb-2">Zatiaľ nemáš žiadne ponuky</p>
+              <p className="bl-mono text-sm mb-6">Vytvor svoju prvú ponuku a nájdi juniora do tímu.</p>
               <Link href="/dashboard/employer/create-job">
                 <Button>Vytvoriť ponuku</Button>
               </Link>
@@ -116,17 +113,17 @@ export default function EmployerDashboard() {
           ) : (
             <div className="space-y-4">
               {jobs.map((job: any) => (
-                <div key={job.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
+                <div key={job.id} className="flex items-center justify-between p-4 border-2 border-[var(--jp-border)] bg-[var(--jp-bg)] hover:border-[var(--jp-signal)] transition-colors flex-wrap gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <Link href={`/jobs/${job.id}`} className="font-medium text-gray-900 hover:text-blue-600">
+                      <Link href={`/jobs/${job.id}`} className="font-bold uppercase text-sm text-[var(--jp-text)] hover:text-[var(--jp-signal)]">
                         {job.title}
                       </Link>
                       <Badge variant={job.status === 'ACTIVE' ? 'success' : 'secondary'}>
                         {job.status === 'ACTIVE' ? 'Aktívna' : 'Zatvorená'}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="bl-mono text-xs text-[var(--jp-muted)] mt-1">
                       {job.location} • {getJobTypeLabel(job.type)} • {job._count?.applications || 0} prihlášok
                     </p>
                   </div>
@@ -144,6 +141,7 @@ export default function EmployerDashboard() {
           )}
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }

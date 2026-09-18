@@ -5,13 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { api } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { formatDate, formatSalary, getJobTypeLabel } from '@/lib/utils';
-import { MapPin, Building2, Clock, DollarSign, Globe, ArrowLeft, Bookmark, BookmarkCheck, Send, Star, CheckCircle } from 'lucide-react';
+import { MapPin, Building2, Globe, ArrowLeft, Bookmark, BookmarkCheck, Send, Star, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
@@ -111,18 +110,18 @@ export default function JobDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-[var(--jp-canvas)]">
+        <div className="text-center bg-[var(--jp-bg)] border-2 border-[var(--jp-border)] p-8 max-w-md w-full">
           <p className="text-red-500 mb-4">{error}</p>
-          <Link href="/jobs" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900">
+          <Link href="/jobs" className="inline-flex items-center text-sm text-[var(--jp-text)] hover:text-[var(--jp-signal)]">
             <ArrowLeft className="h-4 w-4 mr-1" /> Späť na ponuky
           </Link>
         </div>
@@ -132,223 +131,234 @@ export default function JobDetailPage() {
 
   if (!job) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <p className="text-gray-500">Ponuka nebola nájdená</p>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <p className="text-[var(--jp-muted)]">Ponuka nebola nájdená</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <Link href="/jobs" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 mb-6">
-        <ArrowLeft className="h-4 w-4 mr-1" /> Späť na ponuky
-      </Link>
+    <div className="bg-[var(--jp-canvas)]">
+      <div className="mx-auto max-w-[1200px] px-3 sm:px-6 lg:px-10 py-8">
+        <Link href="/jobs" className="bl-mono inline-flex items-center text-sm text-[var(--jp-text)] hover:text-[var(--jp-signal)] mb-6">
+          <ArrowLeft className="h-4 w-4 mr-1" /> Späť na ponuky
+        </Link>
 
-      <Card className="mb-8">
-        <CardContent className="p-8">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-100 text-xl font-bold text-blue-600">
-                  {job.employer?.companyName?.[0] || '?'}
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
-                  <p className="text-lg text-gray-500">{job.employer?.companyName}</p>
-                </div>
+        {/* HEAD */}
+        <div className="border-2 border-[var(--jp-border)] bg-[var(--jp-ink)] text-[var(--jp-ink-text)] mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
+            <div className="p-6 sm:p-8 lg:border-r-2 border-[var(--jp-ink-text)]">
+              <p className="bl-mono text-[11px] opacity-70 mb-3">{job.employer?.companyName} / {getJobTypeLabel(job.type)}</p>
+              <h1 className="bl-display text-3xl sm:text-5xl">{job.title}</h1>
+              <div className="bl-mono mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[12px] opacity-80">
+                <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {job.location}</span>
+                {job.isRemote && <span>Remote</span>}
+                <span>{formatDate(job.createdAt)}</span>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              {matchScore && (
-                <div className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium ${
-                  matchScore.score >= 70 ? 'bg-green-100 text-green-700' :
-                  matchScore.score >= 40 ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-gray-100 text-gray-600'
-                }`}>
-                  <Star className="h-4 w-4" />
-                  {matchScore.score}% match
-                </div>
-              )}
-              {user?.role === 'CANDIDATE' && (
-                <Button variant="outline" onClick={handleSaveJob}>
-                  {saved ? <BookmarkCheck className="h-4 w-4 mr-2 text-blue-600" /> : <Bookmark className="h-4 w-4 mr-2" />}
-                  {saved ? 'Uložené' : 'Uložiť'}
-                </Button>
-              )}
+            <div className="p-6 sm:p-8 flex flex-col justify-between gap-4">
+              <div className="text-right">
+                <p className="bl-mono text-[11px] opacity-60 mb-1">Plat</p>
+                <p className="bl-display text-2xl text-[var(--jp-signal)]">{formatSalary(job.minSalary, job.maxSalary, job.currency)}</p>
+              </div>
+              <div className="flex flex-col gap-3">
+                {matchScore && (
+                  <div className={`bl-mono text-center text-sm font-bold border-2 py-2 ${
+                    matchScore.score >= 70 ? 'border-[var(--jp-signal)] text-[var(--jp-signal)]' :
+                    matchScore.score >= 40 ? 'border-[var(--jp-ink-text)] text-[var(--jp-ink-text)]' :
+                    'border-[var(--jp-ink-text)] text-[var(--jp-ink-text)] opacity-60'
+                  }`}>
+                    <Star className="h-4 w-4 inline mr-1" />
+                    {matchScore.score}% match
+                  </div>
+                )}
+                {user?.role === 'CANDIDATE' && (
+                  <button onClick={handleSaveJob} className="bl-mono border-2 border-[var(--jp-ink-text)] px-4 py-2.5 text-sm font-bold text-[var(--jp-ink-text)] hover:bg-[var(--jp-signal)] hover:text-[var(--jp-ink)] transition-colors">
+                    {saved ? <><BookmarkCheck className="h-4 w-4 inline mr-2" /> Uložené</> : <><Bookmark className="h-4 w-4 inline mr-2" /> Uložiť</>}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex flex-wrap gap-3 mb-6">
-            <Badge variant="secondary">{getJobTypeLabel(job.type)}</Badge>
-            <Badge variant="outline">
-              <MapPin className="h-3 w-3 mr-1" /> {job.location}
-            </Badge>
-            {job.isRemote && <Badge variant="success">Remote</Badge>}
-            <Badge variant="outline">
-              <DollarSign className="h-3 w-3 mr-1" /> {formatSalary(job.minSalary, job.maxSalary, job.currency)}
-            </Badge>
-            <Badge variant="outline">
-              <Clock className="h-3 w-3 mr-1" /> {formatDate(job.createdAt)}
-            </Badge>
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+          {/* MAIN */}
+          <div className="space-y-8">
+            <Card>
+              <CardContent className="p-6 sm:p-8">
+                <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--jp-text)] mb-3">Popis pozície</h2>
+                <p className="text-[var(--jp-text)] whitespace-pre-line leading-6">{job.description}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6 sm:p-8">
+                <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--jp-text)] mb-4">Požiadavky</h2>
+                <ul className="space-y-3">
+                  {job.requirements?.map((req: string, i: number) => (
+                    <li key={i} className="bl-mono text-[13px] flex items-start gap-3 text-[var(--jp-text)]">
+                      <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)] shrink-0 mt-1" /> {req}
+                    </li>
+                  ))}
+                </ul>
+
+                <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--jp-text)] mt-8 mb-4">Náplň práce</h2>
+                <ul className="space-y-3">
+                  {job.responsibilities?.map((resp: string, i: number) => (
+                    <li key={i} className="bl-mono text-[13px] flex items-start gap-3 text-[var(--jp-text)]">
+                      <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)] shrink-0 mt-1" /> {resp}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="prose max-w-none">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Popis pozície</h3>
-            <p className="text-gray-600 whitespace-pre-line">{job.description}</p>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Požiadavky</h3>
-            <ul className="list-disc pl-5 space-y-1 text-gray-600">
-              {job.requirements?.map((req: string, i: number) => (
-                <li key={i}>{req}</li>
-              ))}
-            </ul>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Náplň práce</h3>
-            <ul className="list-disc pl-5 space-y-1 text-gray-600">
-              {job.responsibilities?.map((resp: string, i: number) => (
-                <li key={i}>{resp}</li>
-              ))}
-            </ul>
+          {/* SIDE */}
+          <div className="space-y-8">
+            <Card>
+              <CardContent className="p-6 sm:p-8">
+                <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--jp-text)] mb-4">O spoločnosti</h2>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex h-16 w-16 items-center justify-center border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] text-2xl font-bold text-[var(--jp-text)]">
+                    {job.employer?.companyName?.[0] || '?'}
+                  </div>
+                  <div>
+                    <p className="font-bold uppercase text-[var(--jp-text)]">{job.employer?.companyName}</p>
+                    <p className="bl-mono text-xs text-[var(--jp-muted)]">{job.employer?.industry}</p>
+                  </div>
+                </div>
+                {job.employer?.description && (
+                  <p className="text-sm text-[var(--jp-muted)] mb-4">{job.employer.description}</p>
+                )}
+                <div className="flex flex-wrap gap-4 bl-mono text-xs text-[var(--jp-muted)]">
+                  {job.employer?.companySize && (
+                    <span className="inline-flex items-center gap-1"><Building2 className="h-4 w-4" /> {job.employer.companySize} zamestnancov</span>
+                  )}
+                  {job.employer?.website && (
+                    <a href={job.employer.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[var(--jp-text)] hover:text-[var(--jp-signal)]">
+                      <Globe className="h-4 w-4" /> Webová stránka
+                    </a>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
 
             {job.skills?.length > 0 && (
-              <>
-                <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Technológie</h3>
-                <div className="flex flex-wrap gap-2">
-                  {job.skills.map((skill: string) => (
-                    <Badge key={skill} className="bg-blue-50 text-blue-700">
-                      {skill}
-                    </Badge>
-                  ))}
+              <Card>
+                <CardContent className="p-6 sm:p-8">
+                  <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--jp-text)] mb-4">Technológie</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {job.skills.map((skill: string) => (
+                      <span key={skill} className="bl-mono border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] px-3 py-1.5 text-xs font-bold text-[var(--jp-text)]">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+
+        {/* APPLY */}
+        {applied ? (
+          <Card className="mt-8 bg-[var(--jp-signal)] border-[var(--jp-border)]">
+            <CardContent className="p-8 text-center">
+              <CheckCircle className="h-12 w-12 text-[var(--jp-ink)] mx-auto mb-4" />
+              <h2 className="text-xl font-bold uppercase text-[var(--jp-ink)] mb-2">Prihláška odoslaná!</h2>
+              <p className="text-[var(--jp-ink)] opacity-80">Tvoja prihláška na pozíciu "{job.title}" bola úspešne odoslaná.</p>
+            </CardContent>
+          </Card>
+        ) : user?.role === 'CANDIDATE' && !isApplying ? (
+          <div className="mt-8 text-center">
+            <button onClick={() => setIsApplying(true)} className="bl-mono inline-flex items-center justify-between gap-6 bg-[var(--jp-accent)] text-[var(--jp-accent-contrast)] text-[13px] font-bold px-8 h-14 hover:bg-[var(--jp-accent-hover)] transition-colors">
+              <Send className="h-4 w-4 mr-2" /> Prihlásiť sa na túto pozíciu
+            </button>
+          </div>
+        ) : user?.role === 'CANDIDATE' && isApplying ? (
+          <Card className="mt-8">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-bold uppercase text-[var(--jp-text)] mb-4">Prihlásenie na pozíciu</h3>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="coverLetter">Motivačný list (voliteľné)</Label>
+                  <Textarea
+                    id="coverLetter"
+                    placeholder="Napíš pár slov o sebe a prečo by si chcel túto pozíciu..."
+                    value={coverLetter}
+                    onChange={(e) => setCoverLetter(e.target.value)}
+                    className="mt-1"
+                    rows={5}
+                  />
                 </div>
-              </>
-            )}
+                <div className="flex gap-3">
+                  <Button onClick={handleApply} disabled={applying}>
+                    {applying ? 'Odosielam...' : 'Odoslať prihlášku'}
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsApplying(false)}>
+                    Zrušiť
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ) : !user && !isApplying ? (
+          <div className="mt-8 text-center bg-[var(--jp-bg)] border-2 border-[var(--jp-border)] p-8">
+            <p className="bl-mono text-[13px] text-[var(--jp-muted)] mb-6">Môžeš sa prihlásiť alebo pokračovať bez registrácie.</p>
+            <div className="flex justify-center gap-4 flex-wrap">
+              <Link href={`/auth/login?redirect=/jobs/${id}`}>
+                <Button variant="outline">Prihlásiť sa</Button>
+              </Link>
+              <Button size="lg" onClick={() => setIsApplying(true)}>
+                <Send className="h-4 w-4 mr-2" /> Pokračovať bez registrácie
+              </Button>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        ) : null}
 
-      <Card className="mb-8">
-        <CardContent className="p-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">O spoločnosti</h2>
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-100 text-2xl font-bold text-gray-600">
-              {job.employer?.companyName?.[0] || '?'}
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">{job.employer?.companyName}</p>
-              <p className="text-sm text-gray-500">{job.employer?.industry}</p>
-            </div>
-          </div>
-          {job.employer?.description && (
-            <p className="text-sm text-gray-600 mb-4">{job.employer.description}</p>
-          )}
-          <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-            {job.employer?.companySize && (
-              <span className="flex items-center gap-1"><Building2 className="h-4 w-4" /> {job.employer.companySize} zamestnancov</span>
-            )}
-            {job.employer?.website && (
-              <a href={job.employer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-600 hover:underline">
-                <Globe className="h-4 w-4" /> Webová stránka
-              </a>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {applied ? (
-        <Card className="border-green-200 bg-green-50">
-          <CardContent className="p-8 text-center">
-            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-green-800 mb-2">Prihláška odoslaná!</h2>
-            <p className="text-green-600">Tvoja prihláška na pozíciu "{job.title}" bola úspešne odoslaná.</p>
-          </CardContent>
-        </Card>
-      ) : user?.role === 'CANDIDATE' && !isApplying ? (
-        <div className="text-center">
-          <Button size="lg" onClick={() => setIsApplying(true)}>
-            <Send className="h-4 w-4 mr-2" /> Prihlásiť sa na túto pozíciu
-          </Button>
-        </div>
-      ) : user?.role === 'CANDIDATE' && isApplying ? (
-        <Card>
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Prihlásenie na pozíciu</h3>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="coverLetter">Motivačný list (voliteľné)</Label>
-                <Textarea
-                  id="coverLetter"
-                  placeholder="Napíš pár slov o sebe a prečo by si chcel túto pozíciu..."
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  className="mt-1"
-                  rows={5}
-                />
+        {!user && isApplying && (
+          <Card className="mt-8">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-bold uppercase text-[var(--jp-text)] mb-4">Prihlásiť sa na pozíciu</h3>
+              <div className="space-y-4">
+                <div>
+                  <Label>Meno a priezvisko</Label>
+                  <Input value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="Ján Mrkvička" />
+                </div>
+                <div>
+                  <Label>Email</Label>
+                  <Input type="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} placeholder="jan@example.sk" />
+                </div>
+                <div>
+                  <Label>Telefón (voliteľné)</Label>
+                  <Input value={guestPhone} onChange={e => setGuestPhone(e.target.value)} placeholder="+421 901 123 456" />
+                </div>
+                <div>
+                  <Label>Motivačný list (voliteľné)</Label>
+                  <Textarea
+                    placeholder="Napíš pár slov o sebe a prečo by si chcel túto pozíciu..."
+                    value={coverLetter}
+                    onChange={(e) => setCoverLetter(e.target.value)}
+                    className="mt-1"
+                    rows={5}
+                  />
+                </div>
+                <p className="bl-mono text-[11px] text-[var(--jp-muted)]">Po odoslaní ti bude vytvorený účet, pomocou ktorého sa neskôr môžeš prihlásiť.</p>
+                <div className="flex gap-3">
+                  <Button onClick={handleGuestApply} disabled={applying}>
+                    {applying ? 'Odosielam...' : 'Odoslať prihlášku'}
+                  </Button>
+                  <Button variant="outline" onClick={() => { setIsApplying(false); setCoverLetter(''); }}>
+                    Zrušiť
+                  </Button>
+                </div>
               </div>
-              <div className="flex gap-3">
-                <Button onClick={handleApply} disabled={applying}>
-                  {applying ? 'Odosielam...' : 'Odoslať prihlášku'}
-                </Button>
-                <Button variant="outline" onClick={() => setIsApplying(false)}>
-                  Zrušiť
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ) : !user && !isApplying ? (
-        <div className="text-center">
-          <p className="text-gray-500 mb-6">Môžeš sa prihlásiť alebo pokračovať bez registrácie.</p>
-          <div className="flex justify-center gap-4">
-            <Link href={`/auth/login?redirect=/jobs/${id}`}>
-              <Button variant="outline">Prihlásiť sa</Button>
-            </Link>
-            <Button size="lg" onClick={() => setIsApplying(true)}>
-              <Send className="h-4 w-4 mr-2" /> Pokračovať bez registrácie
-            </Button>
-          </div>
-        </div>
-      ) : null}
-
-      {!user && isApplying && (
-        <Card>
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Prihlásiť sa na pozíciu</h3>
-            <div className="space-y-4">
-              <div>
-                <Label>Meno a priezvisko</Label>
-                <Input value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="Ján Mrkvička" />
-              </div>
-              <div>
-                <Label>Email</Label>
-                <Input type="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} placeholder="jan@example.sk" />
-              </div>
-              <div>
-                <Label>Telefón (voliteľné)</Label>
-                <Input value={guestPhone} onChange={e => setGuestPhone(e.target.value)} placeholder="+421 901 123 456" />
-              </div>
-              <div>
-                <Label>Motivačný list (voliteľné)</Label>
-                <Textarea
-                  placeholder="Napíš pár slov o sebe a prečo by si chcel túto pozíciu..."
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  className="mt-1"
-                  rows={5}
-                />
-              </div>
-              <p className="text-xs text-gray-400">Po odoslaní ti bude vytvorený účet, pomocou ktorého sa neskôr môžeš prihlásiť.</p>
-              <div className="flex gap-3">
-                <Button onClick={handleGuestApply} disabled={applying}>
-                  {applying ? 'Odosielam...' : 'Odoslať prihlášku'}
-                </Button>
-                <Button variant="outline" onClick={() => { setIsApplying(false); setCoverLetter(''); }}>
-                  Zrušiť
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

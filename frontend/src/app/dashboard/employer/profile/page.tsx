@@ -60,14 +60,19 @@ export default function EmployerProfilePage() {
 
   if (fetching) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-[var(--jp-canvas)]">
+    <div className="mx-auto max-w-2xl px-3 sm:px-6 lg:px-10 py-10">
+        <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-4 flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Profil spoločnosti
+        </p>
+        <h1 className="bl-display text-4xl mb-8">Profil<span className="text-[var(--jp-signal)]">.</span></h1>
       <Card>
         <CardHeader>
           <CardTitle>Profil spoločnosti</CardTitle>
@@ -90,7 +95,7 @@ export default function EmployerProfilePage() {
                 <Label htmlFor="companySize">Veľkosť spoločnosti</Label>
                 <select
                   id="companySize"
-                  className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm"
+                  className="bl-mono h-10 w-full border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] px-3 text-sm"
                   value={form.companySize}
                   onChange={(e) => setForm({ ...form, companySize: e.target.value })}
                 >
@@ -151,6 +156,7 @@ export default function EmployerProfilePage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

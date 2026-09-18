@@ -9,17 +9,18 @@ interface ThemeContextType {
   setTheme: (t: ThemeName) => void;
 }
 
+const DEFAULT_THEME: ThemeName = 'brutal-signal';
+const THEME_KEY = 'jp-theme';
+const ALL_THEMES: ThemeName[] = ['brutal-signal', 'brutal', 'brutal-dark', 'bauhaus2', 'bauhaus-primar', 'bauhaus-poster'];
+
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'bauhaus2',
+  theme: DEFAULT_THEME,
   setTheme: () => {},
 });
 
-const THEME_KEY = 'jp-theme';
-const ALL_THEMES: ThemeName[] = ['bauhaus2', 'bauhaus-primar', 'bauhaus-poster', 'brutal', 'brutal-dark', 'brutal-signal'];
-
 export function ThemeProvider({
   children,
-  initialTheme = 'bauhaus2',
+  initialTheme = DEFAULT_THEME,
 }: {
   children: React.ReactNode;
   initialTheme?: ThemeName;

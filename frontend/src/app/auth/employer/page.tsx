@@ -18,8 +18,8 @@ export default function EmployerAuthPage() {
   }, [user, loading, router]);
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+      <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
     </div>
   );
 }

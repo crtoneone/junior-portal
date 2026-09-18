@@ -9,16 +9,16 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'default', className }: BadgeProps) {
   const variants = {
-    default: 'bg-blue-100 text-blue-800',
-    secondary: 'bg-gray-100 text-gray-800',
-    outline: 'border border-gray-300 text-gray-700',
-    success: 'bg-green-100 text-green-800',
-    warning: 'bg-yellow-100 text-yellow-800',
-    danger: 'bg-red-100 text-red-800',
+    default: 'bg-[var(--jp-accent)] text-[var(--jp-accent-contrast)]',
+    secondary: 'bg-[var(--jp-surface)] text-[var(--jp-text)] border border-[var(--jp-border)]',
+    outline: 'border-2 border-[var(--jp-border)] bg-transparent text-[var(--jp-text)]',
+    success: 'bg-[var(--jp-accent-grad)] text-[var(--jp-text)] border border-[var(--jp-border)]',
+    warning: 'bg-[var(--jp-signal)] text-[var(--jp-ink)] border border-[var(--jp-border)]',
+    danger: 'bg-[var(--jp-signal)] text-[var(--jp-ink)] border border-[var(--jp-border)]',
   };
 
   return (
-    <span className={cn('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', variants[variant], className)}>
+    <span className={cn('inline-flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-wide', variants[variant], className)}>
       {children}
     </span>
   );

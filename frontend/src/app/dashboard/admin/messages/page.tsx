@@ -42,10 +42,15 @@ export default function AdminMessagesPage() {
   useEffect(() => { fetchMessages(); }, [token, page, statusFilter]);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-[var(--jp-canvas)]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Kontaktné správy</h1>
-        <div className="text-sm text-gray-500">Celkom: {total}</div>
+        <div>
+          <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-1 flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Sprava
+          </p>
+          <h1 className="bl-display text-3xl">Správy<span className="text-[var(--jp-signal)]">.</span></h1>
+        </div>
+        <div className="bl-mono text-sm text-[var(--jp-muted)]">Celkom: {total}</div>
       </div>
 
       <Card className="mb-6">
@@ -68,30 +73,30 @@ export default function AdminMessagesPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>
+            <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" /></div>
           ) : messages.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">Žiadne správy</div>
+            <div className="text-center py-12 text-[var(--jp-muted)]">Žiadne správy</div>
           ) : (
-            <div className="divide-y">
+            <div className="divide-y-2 divide-[var(--jp-border)]">
               {messages.map((m: any) => (
                 <Link
                   key={m.id}
                   href={`/dashboard/admin/messages/${m.id}`}
-                  className={`flex items-start gap-4 p-4 hover:bg-gray-50 transition-colors ${m.status === 'UNREAD' ? 'bg-blue-50/50' : ''}`}
+                  className={`flex items-start gap-4 p-4 hover:bg-[var(--jp-surface)] transition-colors ${m.status === 'UNREAD' ? 'bg-[var(--jp-bg)]' : ''}`}
                 >
-                  <div className={`mt-1 p-2 rounded-full ${m.status === 'UNREAD' ? 'bg-blue-100 text-blue-600' : m.status === 'REPLIED' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                  <div className={`mt-1 p-2 border-2 border-[var(--jp-border)] ${m.status === 'UNREAD' ? 'bg-[var(--jp-signal)] text-[var(--jp-ink)]' : m.status === 'REPLIED' ? 'bg-[var(--jp-ink)] text-[var(--jp-signal)]' : 'bg-[var(--jp-surface)] text-[var(--jp-muted)]'}`}>
                     {m.status === 'UNREAD' ? <Mail className="w-4 h-4" /> : m.status === 'REPLIED' ? <Reply className="w-4 h-4" /> : <MailOpen className="w-4 h-4" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className={`text-sm font-medium ${m.status === 'UNREAD' ? 'text-gray-900' : 'text-gray-700'}`}>{m.name}</span>
+                      <span className={`bl-mono text-sm font-bold ${m.status === 'UNREAD' ? 'text-[var(--jp-text)]' : 'text-[var(--jp-text)]'}`}>{m.name}</span>
                       <Badge variant={m.status === 'UNREAD' ? 'warning' : m.status === 'REPLIED' ? 'success' : 'secondary'}>
                         {statusLabels[m.status]}
                       </Badge>
                     </div>
-                    <p className={`text-sm ${m.status === 'UNREAD' ? 'font-medium text-gray-900' : 'text-gray-600'}`}>{m.subject}</p>
-                    <p className="text-xs text-gray-400 mt-1 truncate">{m.message}</p>
-                    <div className="flex items-center gap-1 mt-1.5 text-xs text-gray-400">
+                    <p className={`bl-mono text-sm ${m.status === 'UNREAD' ? 'font-bold text-[var(--jp-text)]' : 'text-[var(--jp-muted)]'}`}>{m.subject}</p>
+                    <p className="bl-mono text-xs text-[var(--jp-muted)] mt-1 truncate">{m.message}</p>
+                    <div className="flex items-center gap-1 mt-1.5 bl-mono text-xs text-[var(--jp-muted)]">
                       <Clock className="w-3 h-3" />
                       <span>{new Date(m.createdAt).toLocaleString('sk-SK')}</span>
                       <span className="mx-1">·</span>
@@ -110,7 +115,7 @@ export default function AdminMessagesPage() {
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="text-sm text-gray-600">Stránka {page} z {totalPages}</span>
+          <span className="bl-mono text-sm text-[var(--jp-muted)]">Stránka {page} z {totalPages}</span>
           <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
             <ChevronRight className="w-4 h-4" />
           </Button>

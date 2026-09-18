@@ -69,7 +69,12 @@ export default function CreateJobPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-[var(--jp-canvas)]">
+    <div className="mx-auto max-w-3xl px-3 sm:px-6 lg:px-10 py-10">
+      <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-4 flex items-center gap-2">
+        <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Ponuka
+      </p>
+      <h1 className="bl-display text-4xl mb-8">Nová ponuka<span className="text-[var(--jp-signal)]">.</span></h1>
       <Card>
         <CardHeader>
           <CardTitle>Nová ponuka práce</CardTitle>
@@ -114,7 +119,7 @@ export default function CreateJobPage() {
                 <Label htmlFor="type">Typ úväzku *</Label>
                 <select
                   id="type"
-                  className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm"
+                  className="bl-mono h-10 w-full border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] px-3 text-sm"
                   value={form.type}
                   onChange={(e) => setForm({ ...form, type: e.target.value })}
                 >
@@ -133,7 +138,7 @@ export default function CreateJobPage() {
                 id="isRemote"
                 checked={form.isRemote}
                 onChange={(e) => setForm({ ...form, isRemote: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                className="h-5 w-5 border-2 border-[var(--jp-border)] accent-[var(--jp-signal)]"
               />
               <Label htmlFor="isRemote">Remote práca</Label>
             </div>
@@ -163,7 +168,7 @@ export default function CreateJobPage() {
                 <Label htmlFor="currency">Mena</Label>
                 <select
                   id="currency"
-                  className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm"
+                  className="bl-mono h-10 w-full border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] px-3 text-sm"
                   value={form.currency}
                   onChange={(e) => setForm({ ...form, currency: e.target.value })}
                 >
@@ -239,6 +244,7 @@ export default function CreateJobPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

@@ -70,24 +70,29 @@ export default function CandidateProfilePage() {
 
   if (fetching) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   if (fetchError) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{fetchError}</p>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="text-center border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] p-8 w-full max-w-md">
+          <p className="text-[var(--jp-signal)] bl-mono text-[13px] mb-4">{fetchError}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-[var(--jp-canvas)]">
+      <div className="mx-auto max-w-2xl px-3 sm:px-6 lg:px-10 py-10">
+        <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-4 flex items-center gap-2">
+          <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Môj profil
+        </p>
+        <h1 className="bl-display text-4xl mb-8">Profil<span className="text-[var(--jp-signal)]">.</span></h1>
       <Card>
         <CardHeader>
           <CardTitle>Môj profil</CardTitle>
@@ -210,7 +215,7 @@ export default function CandidateProfilePage() {
                 id="isOpenToWork"
                 checked={form.isOpenToWork}
                 onChange={(e) => setForm({ ...form, isOpenToWork: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                className="h-5 w-5 border-2 border-[var(--jp-border)] accent-[var(--jp-signal)]"
               />
               <Label htmlFor="isOpenToWork">Hľadám prácu</Label>
             </div>
@@ -221,6 +226,7 @@ export default function CandidateProfilePage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

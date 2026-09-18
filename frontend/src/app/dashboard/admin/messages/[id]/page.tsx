@@ -54,25 +54,25 @@ export default function AdminMessageDetailPage() {
     finally { setSending(false); }
   };
 
-  if (loading) return <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
+  if (loading) return <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center bg-[var(--jp-canvas)]"><div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" /></div>;
   if (!message) return null;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-3xl">
-      <Link href="/dashboard/admin/messages" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-3xl bg-[var(--jp-canvas)]">
+      <Link href="/dashboard/admin/messages" className="bl-mono inline-flex items-center gap-1.5 text-sm text-[var(--jp-muted)] hover:text-[var(--jp-text)] mb-6">
         <ArrowLeft className="w-4 h-4" /> Späť na zoznam správ
       </Link>
 
       <Card>
         <CardHeader className="flex flex-row items-start justify-between gap-4">
           <div>
-            <CardTitle className="text-lg">{message.subject}</CardTitle>
-            <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-              <span className="font-medium text-gray-700">{message.name}</span>
+            <CardTitle className="text-lg uppercase">{message.subject}</CardTitle>
+            <div className="flex items-center gap-2 mt-2 bl-mono text-sm text-[var(--jp-muted)]">
+              <span className="font-bold text-[var(--jp-text)]">{message.name}</span>
               <span>·</span>
-              <a href={`mailto:${message.email}`} className="text-blue-600 hover:underline">{message.email}</a>
+              <a href={`mailto:${message.email}`} className="text-[var(--jp-signal)] font-bold hover:underline">{message.email}</a>
             </div>
-            <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
+            <div className="flex items-center gap-2 mt-1 bl-mono text-xs text-[var(--jp-muted)]">
               <Clock className="w-3 h-3" />
               <span>{new Date(message.createdAt).toLocaleString('sk-SK')}</span>
               <Badge variant={message.status === 'UNREAD' ? 'warning' : message.status === 'REPLIED' ? 'success' : 'secondary'}>
@@ -82,25 +82,25 @@ export default function AdminMessageDetailPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="p-4 bg-gray-50 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">
+          <div className="p-4 border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] text-sm text-[var(--jp-text)] whitespace-pre-wrap">
             {message.message}
           </div>
         </CardContent>
       </Card>
 
       {message.reply && (
-        <div className="mt-4 ml-6 border-l-4 border-green-300 bg-green-50 rounded-r-lg p-4">
-          <div className="flex items-center gap-2 text-sm font-medium text-green-700 mb-2">
+        <div className="mt-4 ml-6 border-l-4 border-[var(--jp-signal)] bg-[var(--jp-bg)] p-4 border-2 border-[var(--jp-border)]">
+          <div className="flex items-center gap-2 bl-mono text-sm font-bold text-[var(--jp-signal)] mb-2">
             <Reply className="w-4 h-4" />
             Tvoja odpoveď ({message.repliedAt ? new Date(message.repliedAt).toLocaleString('sk-SK') : ''})
           </div>
-          <p className="text-sm text-gray-700 whitespace-pre-wrap">{message.reply}</p>
+          <p className="bl-mono text-sm text-[var(--jp-text)] whitespace-pre-wrap">{message.reply}</p>
         </div>
       )}
 
       {message.status !== 'REPLIED' && (
         <Card className="mt-6">
-          <CardHeader><CardTitle className="text-base">Odpovedať</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base uppercase">Odpovedať</CardTitle></CardHeader>
           <CardContent>
             <Textarea
               placeholder="Napíš odpoveď..."
@@ -109,7 +109,7 @@ export default function AdminMessageDetailPage() {
               onChange={(e) => setReply(e.target.value)}
             />
             <div className="flex items-center justify-between mt-3">
-              <p className="text-xs text-gray-400">Odpoveď bude viditeľná v detaile správy</p>
+              <p className="bl-mono text-xs text-[var(--jp-muted)]">Odpoveď bude viditeľná v detaile správy</p>
               <Button onClick={sendReply} disabled={!reply.trim() || sending}>
                 {sending ? 'Odosielam...' : <><Reply className="w-4 h-4 mr-1.5" /> Odoslať odpoveď</>}
               </Button>

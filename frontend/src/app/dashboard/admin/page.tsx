@@ -7,7 +7,7 @@ import { api } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Users, Briefcase, Building2, FileText, UserPlus, TrendingUp,
-  Mail, AlertCircle, CheckCircle, XCircle,
+  Mail, CheckCircle, XCircle,
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -25,18 +25,18 @@ export default function AdminDashboardPage() {
       .finally(() => setLoading(false));
   }, [token, user]);
 
-  if (loading) return <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
+  if (loading) return <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center bg-[var(--jp-canvas)]"><div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" /></div>;
 
   const cards = [
-    { label: 'Používatelia', value: stats?.totalUsers || 0, icon: Users, color: 'bg-blue-100 text-blue-600' },
-    { label: 'Kandidáti', value: stats?.totalCandidates || 0, icon: UserPlus, color: 'bg-green-100 text-green-600' },
-    { label: 'Firmy', value: stats?.totalEmployers || 0, icon: Building2, color: 'bg-purple-100 text-purple-600' },
-    { label: 'Admini', value: stats?.totalAdmins || 0, icon: TrendingUp, color: 'bg-orange-100 text-orange-600' },
-    { label: 'Ponuky', value: stats?.totalJobs || 0, icon: Briefcase, color: 'bg-indigo-100 text-indigo-600' },
-    { label: 'Aktívne', value: stats?.activeJobs || 0, icon: CheckCircle, color: 'bg-green-100 text-green-600' },
-    { label: 'Uzavreté', value: stats?.closedJobs || 0, icon: XCircle, color: 'bg-gray-100 text-gray-600' },
-    { label: 'Prihlášky', value: stats?.totalApplications || 0, icon: FileText, color: 'bg-pink-100 text-pink-600' },
-    { label: 'Nespracované správy', value: stats?.unreadMessages || 0, icon: Mail, color: 'bg-red-100 text-red-600' },
+    { label: 'Používatelia', value: stats?.totalUsers || 0, icon: Users },
+    { label: 'Kandidáti', value: stats?.totalCandidates || 0, icon: UserPlus },
+    { label: 'Firmy', value: stats?.totalEmployers || 0, icon: Building2 },
+    { label: 'Admini', value: stats?.totalAdmins || 0, icon: TrendingUp },
+    { label: 'Ponuky', value: stats?.totalJobs || 0, icon: Briefcase },
+    { label: 'Aktívne', value: stats?.activeJobs || 0, icon: CheckCircle },
+    { label: 'Uzavreté', value: stats?.closedJobs || 0, icon: XCircle },
+    { label: 'Prihlášky', value: stats?.totalApplications || 0, icon: FileText },
+    { label: 'Nespracované správy', value: stats?.unreadMessages || 0, icon: Mail },
   ];
 
   const trends = [
@@ -48,33 +48,36 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+    <div className="p-4 sm:p-6 lg:p-8 bg-[var(--jp-canvas)]">
+      <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-2 flex items-center gap-2">
+        <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Prehľad platformy
+      </p>
+      <h1 className="bl-display text-4xl mb-6">Admin <span className="text-[var(--jp-signal)]">Dashboard.</span></h1>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[2px] bg-[var(--jp-border)] border-2 border-[var(--jp-border)] mb-8">
         {cards.map((card) => (
-          <Card key={card.label}>
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className={`rounded-lg p-2.5 ${card.color}`}>
-                <card.icon className="w-4 h-4" />
+          <div key={card.label} className="bg-[var(--jp-bg)] p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 border-2 border-[var(--jp-border)]">
+                <card.icon className="w-4 h-4 text-[var(--jp-signal)]" />
               </div>
               <div className="min-w-0">
-                <p className="text-lg font-bold">{card.value}</p>
-                <p className="text-xs text-gray-500 truncate">{card.label}</p>
+                <p className="bl-display text-xl text-[var(--jp-text)]">{card.value}</p>
+                <p className="bl-mono text-[10px] text-[var(--jp-muted)] truncate">{card.label}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
 
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Trendy (posledné obdobie)</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <h2 className="bl-mono text-sm font-bold uppercase text-[var(--jp-text)] mb-3">Trendy (posledné obdobie)</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[2px] bg-[var(--jp-border)] border-2 border-[var(--jp-border)]">
             {trends.map((t) => (
-              <div key={t.label} className="text-center p-3 rounded-lg bg-gray-50">
-                <p className="text-xl font-bold text-blue-600">{t.value}</p>
-                <p className="text-xs text-gray-500 mt-1">{t.label}</p>
+              <div key={t.label} className="text-center p-3 bg-[var(--jp-bg)]">
+                <p className="bl-display text-xl text-[var(--jp-signal)]">{t.value}</p>
+                <p className="bl-mono text-[10px] text-[var(--jp-muted)] mt-1">{t.label}</p>
               </div>
             ))}
           </div>

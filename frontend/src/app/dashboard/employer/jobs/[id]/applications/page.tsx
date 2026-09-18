@@ -43,18 +43,18 @@ export default function JobApplicationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error}</p>
-          <Link href="/dashboard/employer" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900">
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--jp-canvas)]">
+        <div className="text-center border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] p-8 w-full max-w-md">
+          <p className="text-[var(--jp-signal)] bl-mono text-sm mb-4">{error}</p>
+          <Link href="/dashboard/employer" className="bl-mono inline-flex items-center text-sm text-[var(--jp-muted)] hover:text-[var(--jp-text)]">
             <ArrowLeft className="h-4 w-4 mr-1" /> Späť na dashboard
           </Link>
         </div>
@@ -63,17 +63,18 @@ export default function JobApplicationsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <Link href="/dashboard/employer" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 mb-6">
+    <div className="min-h-[calc(100vh-4rem)] bg-[var(--jp-canvas)]">
+    <div className="mx-auto max-w-4xl px-3 sm:px-6 lg:px-10 py-8">
+      <Link href="/dashboard/employer" className="bl-mono inline-flex items-center text-sm text-[var(--jp-muted)] hover:text-[var(--jp-text)] mb-6">
         <ArrowLeft className="h-4 w-4 mr-1" /> Späť na dashboard
       </Link>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Prihlášky na pozíciu</h1>
+      <h1 className="bl-display text-4xl mb-6">Prihlášky<span className="text-[var(--jp-signal)]">.</span></h1>
 
       {applications.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12">
-            <p className="text-gray-500">Zatiaľ nikto nereagoval na túto ponuku.</p>
+            <p className="text-[var(--jp-muted)]">Zatiaľ nikto nereagoval na túto ponuku.</p>
           </CardContent>
         </Card>
       ) : (
@@ -83,12 +84,12 @@ export default function JobApplicationsPage() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+                    <div className="flex h-12 w-12 items-center justify-center border-2 border-[var(--jp-border)] bg-[var(--jp-signal)] bl-mono text-sm font-bold text-[var(--jp-ink)]">
                       {(app.user?.firstName?.[0] || '?')}{(app.user?.lastName?.[0] || '')}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{app.user.firstName} {app.user.lastName}</p>
-                      <p className="text-sm text-gray-500">{app.user.email}</p>
+                      <p className="font-bold uppercase text-[var(--jp-text)]">{app.user.firstName} {app.user.lastName}</p>
+                      <p className="bl-mono text-sm text-[var(--jp-muted)]">{app.user.email}</p>
                     </div>
                   </div>
                   <Badge
@@ -105,8 +106,8 @@ export default function JobApplicationsPage() {
                 </div>
 
                 {app.user.candidateProfile && (
-                  <div className="mb-4 text-sm text-gray-600">
-                    {app.user.candidateProfile.title && <p className="font-medium">{app.user.candidateProfile.title}</p>}
+                  <div className="mb-4 text-sm text-[var(--jp-muted)]">
+                    {app.user.candidateProfile.title && <p className="font-bold text-[var(--jp-text)]">{app.user.candidateProfile.title}</p>}
                     {app.user.candidateProfile.skills?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
                         {app.user.candidateProfile.skills.map((s: string) => (
@@ -118,45 +119,45 @@ export default function JobApplicationsPage() {
                 )}
 
                 {app.coverLetter && (
-                  <div className="mb-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
-                    <p className="font-medium mb-1">Motivačný list:</p>
+                  <div className="mb-4 p-3 border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] text-sm text-[var(--jp-text)]">
+                    <p className="bl-mono font-bold mb-1 text-[var(--jp-signal)]">Motivačný list:</p>
                     <p className="whitespace-pre-line">{app.coverLetter}</p>
                   </div>
                 )}
 
                 {app.feedback && (
-                  <div className="mb-4 p-3 bg-yellow-50 rounded-lg text-sm text-gray-600">
-                    <p className="font-medium mb-1">Feedback:</p>
+                  <div className="mb-4 p-3 border-2 border-[var(--jp-signal)] bg-[var(--jp-signal)] text-sm text-[var(--jp-ink)]">
+                    <p className="bl-mono font-bold mb-1">Feedback:</p>
                     <p>{app.feedback}</p>
                   </div>
                 )}
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {app.status === 'PENDING' && (
                     <>
                       <Button size="sm" onClick={() => updateStatus(app.id, 'REVIEWED')}>
                         Označiť ako prezerané
                       </Button>
-                      <Button size="sm" variant="outline" className="text-green-600 border-green-300" onClick={() => updateStatus(app.id, 'ACCEPTED')}>
+                      <Button size="sm" variant="outline" onClick={() => updateStatus(app.id, 'ACCEPTED')}>
                         Prijať
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 border-red-300" onClick={() => updateStatus(app.id, 'REJECTED')}>
+                      <Button size="sm" variant="outline" onClick={() => updateStatus(app.id, 'REJECTED')}>
                         Zamietnuť
                       </Button>
                     </>
                   )}
                   {app.status === 'REVIEWED' && (
                     <>
-                      <Button size="sm" variant="outline" className="text-green-600 border-green-300" onClick={() => updateStatus(app.id, 'ACCEPTED')}>
+                      <Button size="sm" variant="outline" onClick={() => updateStatus(app.id, 'ACCEPTED')}>
                         Prijať
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 border-red-300" onClick={() => updateStatus(app.id, 'REJECTED', 'Ďakujeme za záujem, ale rozhodli sme sa pre iného kandidáta.')}>
+                      <Button size="sm" variant="outline" onClick={() => updateStatus(app.id, 'REJECTED', 'Ďakujeme za záujem, ale rozhodli sme sa pre iného kandidáta.')}>
                         Zamietnuť
                       </Button>
                     </>
                   )}
                   {(app.status === 'ACCEPTED' || app.status === 'REJECTED') && (
-                    <span className="text-sm text-gray-400 py-2">Finalizované</span>
+                    <span className="bl-mono text-sm text-[var(--jp-muted)] py-2">Finalizované</span>
                   )}
                 </div>
               </CardContent>
@@ -164,6 +165,7 @@ export default function JobApplicationsPage() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

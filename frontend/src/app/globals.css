@@ -7,23 +7,56 @@
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-sans);
+  background: var(--jp-canvas, var(--color-background));
+  color: var(--jp-text, var(--color-foreground));
+  font-family: var(--jp-font, var(--font-sans));
 }
 
 /* ===== Theme tokens ===== */
-:root,
+/* Default theme: Brutal Signal */
+:root {
+  --jp-font: var(--font-inter-tight), 'Inter Tight', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', 'Courier New', ui-monospace, monospace;
+  --jp-accent: #0a0a0a;
+  --jp-accent-hover: #2a2a2a;
+  --jp-accent-contrast: #ff3b00;
+  --jp-accent-soft: rgba(10, 10, 10, 0.06);
+  --jp-accent-grad: #ff3b00;
+  --jp-canvas: #ff3b00;
+  --jp-bg: #f7f4ee;
+  --jp-surface: #ffffff;
+  --jp-ink: #0a0a0a;
+  --jp-ink-text: #f7f4ee;
+  --jp-signal: #ff3b00;
+  --jp-text: #0a0a0a;
+  --jp-muted: rgba(10, 10, 10, 0.62);
+  --jp-border: #0a0a0a;
+  --jp-border-w: 2px;
+  --jp-radius: 0px;
+  --jp-radius-lg: 0px;
+  --jp-shadow: none;
+  --jp-shadow-strong: none;
+  --jp-tt: uppercase;
+  --jp-ls: -0.02em;
+  --jp-nav-bg: #f7f4ee;
+}
+
+/* Bauhaus 2 */
 [data-theme='bauhaus2'] {
   --jp-font: var(--font-space-grotesk), 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
   --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', 'Courier New', ui-monospace, monospace;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', sans-serif;
   --jp-accent: #ff4d00;
   --jp-accent-hover: #d94100;
   --jp-accent-contrast: #111111;
   --jp-accent-soft: rgba(216, 255, 0, 0.16);
   --jp-accent-grad: #efead0;
+  --jp-canvas: #efead0;
   --jp-bg: #efead0;
   --jp-surface: #e5decb;
+  --jp-ink: #111111;
+  --jp-ink-text: #efead0;
   --jp-text: #111111;
   --jp-muted: rgba(17, 17, 17, 0.66);
   --jp-border: #111111;

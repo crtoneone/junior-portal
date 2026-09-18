@@ -48,10 +48,10 @@ export function ThemeSwitcher({ className, light }: { className?: string; light?
         onClick={() => setOpen((o) => !o)}
         aria-label="Vybrať tému"
         className={cn(
-          'inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors h-[42px]',
+          'inline-flex items-center gap-2 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors h-[42px]',
           light
             ? 'bg-white/10 text-white hover:bg-white/20'
-            : 'border-[var(--jp-border-w)] border-[var(--jp-border)] bg-[var(--jp-bg)] text-[var(--jp-text)] hover:text-[var(--jp-accent)]',
+            : 'border-2 border-[var(--jp-border)] bg-[var(--jp-bg)] text-[var(--jp-text)] hover:bg-[var(--jp-accent)] hover:text-[var(--jp-accent-contrast)]',
         )}
       >
         <Palette className="w-4 h-4" />

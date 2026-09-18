@@ -67,17 +67,22 @@ export default function AdminJobsPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-[var(--jp-canvas)]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Správa ponúk</h1>
-        <div className="text-sm text-gray-500">Celkom: {total}</div>
+        <div>
+          <p className="bl-mono text-[11px] uppercase tracking-wide text-[var(--jp-muted)] mb-1 flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Sprava
+          </p>
+          <h1 className="bl-display text-3xl">Ponuky<span className="text-[var(--jp-signal)]">.</span></h1>
+        </div>
+        <div className="bl-mono text-sm text-[var(--jp-muted)]">Celkom: {total}</div>
       </div>
 
       <Card className="mb-6">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--jp-muted)]" />
               <Input
                 placeholder="Hľadať názov, popis, lokalitu..."
                 className="pl-9"
@@ -104,36 +109,36 @@ export default function AdminJobsPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>
+            <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin border-4 border-[var(--jp-accent)] border-t-transparent" /></div>
           ) : jobs.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">Žiadne ponuky</div>
+            <div className="text-center py-12 text-[var(--jp-muted)]">Žiadne ponuky</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b bg-gray-50">
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Názov</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Firma</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Lokalita</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Stav</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Prihlášky</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Vytvorené</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-600">Akcie</th>
+                  <tr className="border-b-2 border-[var(--jp-border)] bg-[var(--jp-surface)]">
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Názov</th>
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Firma</th>
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Lokalita</th>
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Stav</th>
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Prihlášky</th>
+                    <th className="bl-mono text-left py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Vytvorené</th>
+                    <th className="bl-mono text-right py-3 px-4 text-[10px] font-bold uppercase text-[var(--jp-muted)]">Akcie</th>
                   </tr>
                 </thead>
                 <tbody>
                   {jobs.map((j: any) => (
-                    <tr key={j.id} className="border-b last:border-0 hover:bg-gray-50">
-                      <td className="py-3 px-4 font-medium">{j.title}</td>
-                      <td className="py-3 px-4 text-gray-600">{j.employer?.companyName || 'N/A'}</td>
-                      <td className="py-3 px-4 text-gray-500">{j.location}{j.isRemote ? ' (Remote)' : ''}</td>
+                    <tr key={j.id} className="border-b-2 border-[var(--jp-border)] last:border-0 hover:bg-[var(--jp-surface)]">
+                      <td className="py-3 px-4 font-bold uppercase text-[var(--jp-text)]">{j.title}</td>
+                      <td className="py-3 px-4 text-[var(--jp-muted)]">{j.employer?.companyName || 'N/A'}</td>
+                      <td className="py-3 px-4 text-[var(--jp-muted)]">{j.location}{j.isRemote ? ' (Remote)' : ''}</td>
                       <td className="py-3 px-4">
                         <Badge variant={j.status === 'ACTIVE' ? 'success' : j.status === 'CLOSED' ? 'warning' : 'outline'}>
                           {statusLabels[j.status] || j.status}
                         </Badge>
                       </td>
-                      <td className="py-3 px-4 text-gray-600">{j._count?.applications || 0}</td>
-                      <td className="py-3 px-4 text-gray-500 text-xs">{new Date(j.createdAt).toLocaleDateString('sk-SK')}</td>
+                      <td className="py-3 px-4 text-[var(--jp-muted)]">{j._count?.applications || 0}</td>
+                      <td className="py-3 px-4 text-[var(--jp-muted)] bl-mono text-xs">{new Date(j.createdAt).toLocaleDateString('sk-SK')}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center justify-end gap-1">
                           <Link href={`/jobs/${j.id}`} target="_blank">
@@ -168,7 +173,7 @@ export default function AdminJobsPage() {
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="text-sm text-gray-600">Stránka {page} z {totalPages}</span>
+          <span className="bl-mono text-sm text-[var(--jp-muted)]">Stránka {page} z {totalPages}</span>
           <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
             <ChevronRight className="w-4 h-4" />
           </Button>

@@ -15,40 +15,44 @@ export function Navbar() {
 
   if (pathname.startsWith('/landing-')) return null;
 
+  const navClasses = 'bl-mono text-[12px] font-semibold text-[var(--jp-text)] hover:text-[var(--jp-signal)] transition-colors';
+
   const navLinks = (
     <>
-      <Link href="/jobs" className="text-base text-white/80 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+      <Link href="/jobs" className={navClasses} onClick={() => setMobileOpen(false)}>
         Ponuky
       </Link>
-      <Link href="/pricing" className="text-base text-white/80 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+      <Link href="/pricing" className={navClasses} onClick={() => setMobileOpen(false)}>
         Cenník
       </Link>
-      <Link href="/contact" className="text-base text-white/80 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+      <Link href="/contact" className={navClasses} onClick={() => setMobileOpen(false)}>
         Kontakt
       </Link>
-      <ThemeSwitcher light />
+      <ThemeSwitcher />
     </>
   );
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#644AE9]">
+    <nav className="sticky top-0 z-50 bg-[var(--jp-bg)] border-b-2 border-[var(--jp-border)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-[72px] items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="DajFlek" className="h-[52px] w-auto max-w-none -ml-[30px]" />
+            <span className="font-black text-2xl tracking-tighter uppercase text-[var(--jp-text)]" style={{ fontFamily: 'var(--jp-display-font)' }}>
+              DajFlek<span className="text-[var(--jp-signal)]">®</span>
+            </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-7">
             {navLinks}
           </div>
 
           <div className="flex items-center gap-3">
             {loading ? (
-              <div className="h-8 w-20 animate-pulse rounded-lg bg-white/10" />
+              <div className="h-10 w-24 animate-pulse border-2 border-[var(--jp-border)] bg-[var(--jp-surface)]" />
             ) : user ? (
               <>
                 {user.role === 'CANDIDATE' && (
-                  <Link href="/cv" className="text-base text-white/80 hover:text-white">
+                  <Link href="/cv" className={navClasses}>
                     CV Builder
                   </Link>
                 )}
@@ -60,32 +64,32 @@ export function Navbar() {
                       ? '/dashboard/candidate'
                       : '/dashboard/employer'
                   }
-                  className="text-base text-white/80 hover:text-white"
+                  className={navClasses}
                 >
                   {user.role === 'ADMIN' ? 'Admin' : 'Dashboard'}
                 </Link>
                 {user.role === 'ADMIN' && (
-                  <Link href="/dashboard/admin/messages" className="text-base text-white/80 hover:text-white flex items-center gap-1">
+                  <Link href="/dashboard/admin/messages" className={`${navClasses} flex items-center gap-1`}>
                     <Mail className="w-3.5 h-3.5" /> Správy
                   </Link>
                 )}
-                <Button variant="outline" size="sm" className="border-white/30 bg-white/10 text-white hover:bg-white/20" onClick={logout}>
+                <Button variant="outline" size="sm" onClick={logout}>
                   Odhlásiť
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/auth/login">
-                  <Button variant="outline" className="h-[44px] px-6 border-white/30 bg-white/10 text-white hover:bg-white/20">Prihlásiť</Button>
+                  <Button variant="outline" className="h-[44px] px-6">Prihlásiť</Button>
                 </Link>
                 <Link href="/auth/register">
-                  <Button className="h-[44px] px-6 bg-white text-[#644AE9] hover:bg-white/90">Registrovať</Button>
+                  <Button className="h-[44px] px-6">Registrovať</Button>
                 </Link>
               </>
             )}
 
             <button
-              className="md:hidden ml-2 p-2 text-white"
+              className="md:hidden ml-2 p-2 text-[var(--jp-text)]"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
@@ -104,8 +108,8 @@ export function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden bg-[#644AE9] border-t border-white/10 pb-4">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-3 pt-4">
+        <div className="md:hidden bg-[var(--jp-bg)] border-t-2 border-[var(--jp-border)] pb-4">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-4 pt-4">
             {navLinks}
           </div>
         </div>

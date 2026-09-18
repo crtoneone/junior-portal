@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -66,86 +65,104 @@ export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Cenník pre firmy</h1>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Vyber si plán, ktorý vyhovuje tvojim náborovým potrebám. Všetky plány zahŕňajú 14-dňovú skúšobnú dobu.
-        </p>
-        <div className="flex items-center justify-center gap-3 mt-8">
-          <span className={cn('text-sm', !annual ? 'font-semibold text-gray-900' : 'text-gray-500')}>Mesačne</span>
-          <button
-            onClick={() => setAnnual(!annual)}
-            className={cn(
-              'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              annual ? 'bg-blue-600' : 'bg-gray-300'
-            )}
-          >
-            <span className={cn(
-              'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-              annual ? 'translate-x-6' : 'translate-x-1'
-            )} />
-          </button>
-          <span className={cn('text-sm', annual ? 'font-semibold text-gray-900' : 'text-gray-500')}>
-            Ročne <Badge variant="success" className="ml-1">-20%</Badge>
-          </span>
-        </div>
-      </div>
+    <div className="bg-[var(--jp-canvas)]">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-6 lg:px-10 py-12">
+        <div className="border-2 border-[var(--jp-border)] bg-[var(--jp-bg)]">
+          <div className="border-b-2 border-[var(--jp-border)] p-6 sm:p-10">
+            <p className="bl-mono text-[12px] uppercase tracking-wide text-[var(--jp-muted)] mb-4 flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)]" /> Cenník
+            </p>
+            <h1 className="bl-display text-4xl sm:text-6xl">
+              Cenník<br />pre <span className="text-[var(--jp-signal)]">firmy.</span>
+            </h1>
+            <p className="bl-mono mt-4 text-[12px] text-[var(--jp-muted)]">
+              Všetky plány zahŕňajú 14-dňovú skúšobnú dobu. Žiadne skryté poplatky.
+            </p>
+            <div className="flex items-center gap-3 mt-8">
+              <span className={cn('bl-mono text-[12px] font-bold', !annual ? 'text-[var(--jp-text)]' : 'text-[var(--jp-muted)]')}>Mesačne</span>
+              <button
+                onClick={() => setAnnual(!annual)}
+                className={cn(
+                  'relative inline-flex h-8 w-16 items-center border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] transition-colors',
+                  annual && 'bg-[var(--jp-signal)]'
+                )}
+                aria-label="Prepnúť na ročnú fakturáciu"
+              >
+                <span className={cn(
+                  'inline-block h-6 w-6 border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] transition-transform',
+                  annual ? 'translate-x-8' : 'translate-x-0'
+                )} />
+              </button>
+              <span className={cn('bl-mono text-[12px] font-bold', annual ? 'text-[var(--jp-text)]' : 'text-[var(--jp-muted)]')}>
+                Ročne <span className="bl-mono px-2 py-0.5 border-2 border-[var(--jp-signal)] text-[var(--jp-signal)]">-20%</span>
+              </span>
+            </div>
+          </div>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        {plans.map((plan) => (
-          <Card
-            key={plan.name}
-            className={cn(
-              'relative',
-              plan.popular && 'border-blue-500 shadow-lg ring-1 ring-blue-500'
-            )}
-          >
-            {plan.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-blue-600 text-white px-4 py-1">Najobľúbenejší</Badge>
-              </div>
-            )}
-            <CardHeader className="text-center pt-8">
-              <CardTitle className="text-xl">{plan.name}</CardTitle>
-              <CardDescription>{plan.description}</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold text-gray-900">{annual ? Math.floor(parseInt(plan.price) * 0.8) : plan.price}</span>
-                <span className="text-gray-500 ml-1">€/{plan.period}</span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm">
-                    {feature.included ? (
-                      <Check className="h-4 w-4 text-green-500 shrink-0" />
-                    ) : (
-                      <X className="h-4 w-4 text-gray-300 shrink-0" />
-                    )}
-                    <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
-                      {feature.text}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-[2px] bg-[var(--jp-border)] border-b-2 border-[var(--jp-border)]">
+            {plans.map((plan) => (
+              <Card
+                key={plan.name}
+                className={cn(
+                  'border-r-2 last:border-r-0 border-[var(--jp-border)]',
+                  plan.popular && 'bg-[var(--jp-ink)] border-[var(--jp-ink)]'
+                )}
+              >
+                <CardContent className="p-6 sm:p-8 flex flex-col">
+                  <div className={cn('bl-mono mb-5', plan.popular ? 'text-[var(--jp-signal)]' : 'text-[var(--jp-muted)]')}>
+                    {plan.popular ? 'Najobľúbenejší' : 'Plán'}
+                  </div>
+                  <h2 className={cn('text-xl font-bold uppercase tracking-tight', plan.popular ? 'text-[var(--jp-ink-text)]' : 'text-[var(--jp-text)]')}>{plan.name}</h2>
+                  <p className={cn('bl-mono text-[12px] mt-2', plan.popular ? 'text-[var(--jp-ink-text)] opacity-70' : 'text-[var(--jp-muted)]')}>{plan.description}</p>
+                  <div className="mt-6 pb-6 border-b-2 border-[var(--jp-border)]">
+                    <span className={cn('bl-display text-5xl', plan.popular ? 'text-[var(--jp-signal)]' : 'text-[var(--jp-text)]')}>
+                      {annual ? Math.floor(parseInt(plan.price) * 0.8) : plan.price}
                     </span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/register?role=employer">
-                <Button
-                  className="w-full"
-                  variant={plan.popular ? 'default' : 'outline'}
-                >
-                  {plan.cta}
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                    <span className={cn('bl-mono text-[12px] ml-1', plan.popular ? 'text-[var(--jp-ink-text)] opacity-60' : 'text-[var(--jp-muted)]')}>€/{plan.period}</span>
+                  </div>
+                  <ul className="space-y-3 my-6 flex-1">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-3 bl-mono text-[12px]">
+                        {feature.included ? (
+                          <Check className={cn('h-4 w-4 shrink-0', plan.popular ? 'text-[var(--jp-signal)]' : 'text-[var(--jp-text)]')} />
+                        ) : (
+                          <X className="h-4 w-4 text-[var(--jp-border)] shrink-0" />
+                        )}
+                        <span className={cn(
+                          feature.included
+                            ? (plan.popular ? 'text-[var(--jp-ink-text)]' : 'text-[var(--jp-text)]')
+                            : (plan.popular ? 'text-[var(--jp-ink-text)] opacity-40' : 'text-[var(--jp-muted)]')
+                        )}>
+                          {feature.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/auth/register?role=employer">
+                    <Button
+                      className="w-full"
+                      variant={plan.popular ? 'default' : 'outline'}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-      <div className="mt-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Potrebuješ individuálne riešenie?</h2>
-        <p className="text-gray-500 mb-6">Kontaktuj nás a pripravíme ti cenu na mieru.</p>
-        <Button variant="outline" size="lg">Kontaktovať predaj</Button>
+          <div className="p-6 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="bl-display text-2xl sm:text-4xl">Potrebuješ individuálne riešenie?</h2>
+              <p className="bl-mono mt-3 text-[12px] text-[var(--jp-muted)]">Kontaktuj nás a pripravíme ti cenu na mieru.</p>
+            </div>
+            <div className="md:justify-self-end">
+              <Link href="/contact">
+                <Button variant="outline" size="lg">Kontaktovať predaj</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
