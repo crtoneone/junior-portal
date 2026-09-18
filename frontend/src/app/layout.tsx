@@ -49,7 +49,7 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   title: "DajFlek - Práca pre juniorov a stážistov",
-  description: "Nájdi svoju prvú prácu. Ponuky pre juniorov, stážistov a absolventov.",
+  description: "Portál pre juniorov, stážistov a absolventov",
 };
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react';
+import { ArrowUpRight, Mail } from 'lucide-react';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export function Navbar() {
@@ -32,6 +32,91 @@ export function Navbar() {
     </>
   );
 
+  const authActions = (
+    <>
+      {loading ? (
+        <div className="h-10 w-24 animate-pulse border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] md:hidden" />
+      ) : user ? (
+        <>
+          <div className="md:hidden flex flex-col gap-1 pt-2 border-t-2 border-[var(--jp-border)]">
+            <p className="bl-mono text-[12px] font-semibold text-[var(--jp-muted)] px-1">
+              {user.firstName} {user.lastName} — {user.role === 'ADMIN' ? 'Admin' : user.role === 'CANDIDATE' ? 'Kandidát' : 'Firma'}
+            </p>
+            <Link
+              href={
+                user.role === 'ADMIN'
+                  ? '/dashboard/admin'
+                  : user.role === 'CANDIDATE'
+                  ? '/dashboard/candidate'
+                  : '/dashboard/employer'
+              }
+              className={`${navClasses} flex items-center justify-between px-1 py-2 hover:text-[var(--jp-signal)]`}
+            >
+              {user.role === 'ADMIN' ? 'Admin' : 'Dashboard'} <ArrowUpRight className="w-4 h-4" />
+            </Link>
+            {user.role === 'ADMIN' && (
+              <Link
+                href="/dashboard/admin/messages"
+                className={`${navClasses} flex items-center justify-between px-1 py-2 hover:text-[var(--jp-signal)]`}
+              >
+                Správy <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            )}
+            <button onClick={logout} className={`${navClasses} text-left flex items-center justify-between px-1 py-2 hover:text-[var(--jp-signal)]`}>
+              Odhlásiť <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="hidden md:flex items-center gap-3">
+            {user.role === 'CANDIDATE' && (
+              <Link href="/cv" className={navClasses}>
+                CV Builder
+              </Link>
+            )}
+            <Link
+              href={
+                user.role === 'ADMIN'
+                  ? '/dashboard/admin'
+                  : user.role === 'CANDIDATE'
+                  ? '/dashboard/candidate'
+                  : '/dashboard/employer'
+              }
+              className={navClasses}
+            >
+              {user.role === 'ADMIN' ? 'Admin' : 'Dashboard'}
+            </Link>
+            {user.role === 'ADMIN' && (
+              <Link href="/dashboard/admin/messages" className={`${navClasses} flex items-center gap-1`}>
+                <Mail className="w-3.5 h-3.5" /> Správy
+              </Link>
+            )}
+            <Button variant="outline" size="sm" onClick={logout}>
+              Odhlásiť
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="md:hidden flex flex-col gap-2 pt-2 border-t-2 border-[var(--jp-border)]">
+            <Link href="/auth/login" onClick={() => setMobileOpen(false)} className="bl-mono text-[14px] font-bold uppercase text-[var(--jp-text)] hover:text-[var(--jp-signal)] py-1">
+              Prihlásiť
+            </Link>
+            <Link href="/auth/register" onClick={() => setMobileOpen(false)} className="bl-mono text-[14px] font-bold uppercase text-[var(--jp-text)] hover:text-[var(--jp-signal)] py-1">
+              Registrovať
+            </Link>
+          </div>
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="/auth/login" className={navClasses}>
+              Prihlásiť
+            </Link>
+            <Link href="/auth/register" className={navClasses}>
+              <Button className="h-[44px] px-6">Registrovať</Button>
+            </Link>
+          </div>
+        </>
+      )}
+    </>
+  );
+
   return (
     <nav className="sticky top-0 z-50 bg-[var(--jp-bg)] border-b-2 border-[var(--jp-border)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -47,46 +132,9 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            {loading ? (
-              <div className="h-10 w-24 animate-pulse border-2 border-[var(--jp-border)] bg-[var(--jp-surface)]" />
-            ) : user ? (
-              <>
-                {user.role === 'CANDIDATE' && (
-                  <Link href="/cv" className={navClasses}>
-                    CV Builder
-                  </Link>
-                )}
-                <Link
-                  href={
-                    user.role === 'ADMIN'
-                      ? '/dashboard/admin'
-                      : user.role === 'CANDIDATE'
-                      ? '/dashboard/candidate'
-                      : '/dashboard/employer'
-                  }
-                  className={navClasses}
-                >
-                  {user.role === 'ADMIN' ? 'Admin' : 'Dashboard'}
-                </Link>
-                {user.role === 'ADMIN' && (
-                  <Link href="/dashboard/admin/messages" className={`${navClasses} flex items-center gap-1`}>
-                    <Mail className="w-3.5 h-3.5" /> Správy
-                  </Link>
-                )}
-                <Button variant="outline" size="sm" onClick={logout}>
-                  Odhlásiť
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link href="/auth/login">
-                  <Button variant="outline" className="h-[44px] px-6">Prihlásiť</Button>
-                </Link>
-                <Link href="/auth/register">
-                  <Button className="h-[44px] px-6">Registrovať</Button>
-                </Link>
-              </>
-            )}
+            <div className="hidden md:flex items-center gap-3">
+              {authActions}
+            </div>
 
             <button
               className="md:hidden ml-2 p-2 text-[var(--jp-text)]"
