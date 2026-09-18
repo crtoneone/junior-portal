@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, IBM_Plex_Mono, Fredoka } from "next/font/google";
+import { Inter, Space_Grotesk, IBM_Plex_Mono, Fredoka, Archivo_Black, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/theme";
@@ -29,6 +29,18 @@ const fredoka = Fredoka({
   variable: "--font-fredoka",
 });
 
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-archivo-black",
+});
+
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter-tight",
+});
+
 export const metadata: Metadata = {
   title: "DajFlek - Práca pre juniorov a stážistov",
   description: "Nájdi svoju prvú prácu. Ponuky pre juniorov, stážistov a absolventov.",
@@ -40,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sk" className="h-full antialiased">
-      <body className={`${inter.className} ${spaceGrotesk.variable} ${ibmPlexMono.variable} ${fredoka.variable} min-h-full flex flex-col`}>
+    <html lang="sk" className={`h-full antialiased ${spaceGrotesk.variable} ${ibmPlexMono.variable} ${fredoka.variable} ${archivoBlack.variable} ${interTight.variable}`}>
+      <body className={`${inter.className} min-h-full flex flex-col`}>
         <AuthProvider>
           <ThemeProvider>
             <ErrorBoundary>

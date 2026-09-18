@@ -14,52 +14,6 @@ body {
 
 /* ===== Theme tokens ===== */
 :root,
-[data-theme='corporate'] {
-  --jp-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --jp-accent: #2563eb;
-  --jp-accent-hover: #1e40af;
-  --jp-accent-contrast: #ffffff;
-  --jp-accent-soft: rgba(37, 99, 235, 0.08);
-  --jp-accent-grad: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
-  --jp-bg: #ffffff;
-  --jp-surface: #f8fafc;
-  --jp-text: #0f172a;
-  --jp-muted: #64748b;
-  --jp-border: #e2e8f0;
-  --jp-border-w: 1px;
-  --jp-radius: 0.75rem;
-  --jp-radius-lg: 1rem;
-  --jp-shadow: 0 10px 20px -8px rgb(15 23 42 / 0.12);
-  --jp-shadow-strong: 0 16px 32px -12px rgb(15 23 42 / 0.18);
-  --jp-tt: none;
-  --jp-ls: normal;
-  --jp-sec-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --jp-nav-bg: transparent;
-}
-
-[data-theme='bauhaus'] {
-  --jp-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --jp-accent: #dc2626;
-  --jp-accent-hover: #b91c1c;
-  --jp-accent-contrast: #ffffff;
-  --jp-accent-soft: rgba(220, 38, 38, 0.08);
-  --jp-accent-grad: #ffffff;
-  --jp-bg: #ffffff;
-  --jp-surface: #fafaf9;
-  --jp-text: #000000;
-  --jp-muted: rgba(0, 0, 0, 0.6);
-  --jp-border: #000000;
-  --jp-border-w: 2px;
-  --jp-radius: 0px;
-  --jp-radius-lg: 0px;
-  --jp-shadow: none;
-  --jp-shadow-strong: none;
-  --jp-tt: uppercase;
-  --jp-ls: 0.02em;
-  --jp-sec-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --jp-nav-bg: transparent;
-}
-
 [data-theme='bauhaus2'] {
   --jp-font: var(--font-space-grotesk), 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
   --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', 'Courier New', ui-monospace, monospace;
@@ -84,96 +38,95 @@ body {
   --jp-marquee: #d8ff00;
 }
 
-[data-theme='editorial'] {
-  --jp-font: 'Georgia', 'Times New Roman', serif;
-  --jp-sec-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --jp-accent: #c0392b;
-  --jp-accent-hover: #a93226;
-  --jp-accent-contrast: #ffffff;
-  --jp-accent-soft: rgba(192, 57, 43, 0.08);
-  --jp-accent-grad: #faf8f5;
-  --jp-bg: #faf8f5;
-  --jp-surface: #f0ece4;
-  --jp-text: #2c2420;
-  --jp-muted: rgba(44, 36, 32, 0.55);
-  --jp-border: #2c2420;
-  --jp-border-w: 1px;
+/* ===== Brutal family (inšpirované BRUTAL® — grid, mono, signálna oranžová) ===== */
+[data-theme='brutal'],
+[data-theme='brutal-dark'],
+[data-theme='brutal-signal'] {
+  --jp-font: var(--font-inter-tight), 'Inter Tight', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --jp-display-font: var(--font-archivo-black), 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
+  --jp-sec-font: var(--font-ibm-plex-mono), 'IBM Plex Mono', 'Courier New', ui-monospace, monospace;
   --jp-radius: 0px;
   --jp-radius-lg: 0px;
   --jp-shadow: none;
   --jp-shadow-strong: none;
-  --jp-tt: none;
-  --jp-ls: normal;
-  --jp-nav-bg: #2c2420;
+  --jp-tt: uppercase;
+  --jp-ls: -0.02em;
 }
 
-[data-theme='neon'] {
-  --jp-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --jp-sec-font: 'IBM Plex Mono', monospace;
-  --jp-accent: #00ff88;
-  --jp-accent-hover: #00cc6a;
-  --jp-accent-contrast: #0a0a0f;
-  --jp-accent-soft: rgba(0, 255, 136, 0.12);
-  --jp-accent-grad: #0a0a0f;
-  --jp-bg: #0a0a0f;
-  --jp-surface: #12121a;
-  --jp-text: #e0e0e8;
-  --jp-muted: rgba(224, 224, 232, 0.5);
-  --jp-border: rgba(255, 255, 255, 0.08);
-  --jp-border-w: 1px;
-  --jp-radius: 12px;
-  --jp-radius-lg: 20px;
-  --jp-shadow: 0 4px 24px rgba(0, 255, 136, 0.15);
-  --jp-shadow-strong: 0 8px 40px rgba(0, 255, 136, 0.25);
-  --jp-tt: none;
-  --jp-ls: normal;
-  --jp-nav-bg: rgba(10, 10, 15, 0.85);
-}
-
-[data-theme='retro'] {
-  --jp-font: var(--font-fredoka), 'Fredoka', 'Nunito', sans-serif;
-  --jp-sec-font: 'Inter', sans-serif;
-  --jp-accent: #e67e22;
-  --jp-accent-hover: #d35400;
+/* 1 — Brutal: svetlosivé plátno, biely rám, 1px čierne linky */
+[data-theme='brutal'] {
+  --jp-accent: #ff3b00;
+  --jp-accent-hover: #d93200;
   --jp-accent-contrast: #ffffff;
-  --jp-accent-soft: rgba(230, 126, 34, 0.12);
-  --jp-accent-grad: #fdf2e9;
-  --jp-bg: #fdf6ec;
-  --jp-surface: #fae8cd;
-  --jp-text: #4a3728;
-  --jp-muted: rgba(74, 55, 40, 0.6);
-  --jp-border: #d4a574;
-  --jp-border-w: 2px;
-  --jp-radius: 20px;
-  --jp-radius-lg: 28px;
-  --jp-shadow: 0 6px 20px rgba(74, 55, 40, 0.12);
-  --jp-shadow-strong: 0 10px 32px rgba(74, 55, 40, 0.18);
-  --jp-tt: none;
-  --jp-ls: normal;
-  --jp-nav-bg: #fdf6ec;
-}
-
-[data-theme='minimal'] {
-  --jp-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --jp-sec-font: 'Georgia', serif;
-  --jp-accent: #111111;
-  --jp-accent-hover: #333333;
-  --jp-accent-contrast: #ffffff;
-  --jp-accent-soft: rgba(17, 17, 17, 0.05);
+  --jp-accent-soft: rgba(255, 59, 0, 0.08);
   --jp-accent-grad: #ffffff;
+  --jp-canvas: #e6e6e6;
   --jp-bg: #ffffff;
-  --jp-surface: #fafafa;
-  --jp-text: #111111;
-  --jp-muted: rgba(17, 17, 17, 0.4);
-  --jp-border: #e5e5e5;
+  --jp-surface: #f4f4f4;
+  --jp-ink: #0a0a0a;
+  --jp-ink-text: #ffffff;
+  --jp-text: #0a0a0a;
+  --jp-muted: rgba(10, 10, 10, 0.62);
+  --jp-border: #0a0a0a;
   --jp-border-w: 1px;
-  --jp-radius: 0px;
-  --jp-radius-lg: 0px;
-  --jp-shadow: none;
-  --jp-shadow-strong: none;
-  --jp-tt: none;
-  --jp-ls: 0.01em;
-  --jp-nav-bg: rgba(255, 255, 255, 0.95);
+  --jp-nav-bg: #ffffff;
+}
+
+/* 2 — Brutal Dark: inverzia, čierne plátno, svetlé linky, oranžová svieti */
+[data-theme='brutal-dark'] {
+  --jp-accent: #ff4a1c;
+  --jp-accent-hover: #ff6a44;
+  --jp-accent-contrast: #0a0a0a;
+  --jp-accent-soft: rgba(255, 74, 28, 0.14);
+  --jp-accent-grad: #0a0a0a;
+  --jp-canvas: #0a0a0a;
+  --jp-bg: #111111;
+  --jp-surface: #181818;
+  --jp-ink: #f2f2f2;
+  --jp-ink-text: #0a0a0a;
+  --jp-text: #f2f2f2;
+  --jp-muted: rgba(242, 242, 242, 0.58);
+  --jp-border: rgba(242, 242, 242, 0.85);
+  --jp-border-w: 1px;
+  --jp-nav-bg: #111111;
+}
+
+/* 3 — Brutal Signal: oranžové plátno, hrubšie linky, čierna typografia */
+[data-theme='brutal-signal'] {
+  --jp-accent: #0a0a0a;
+  --jp-accent-hover: #2a2a2a;
+  --jp-accent-contrast: #ff3b00;
+  --jp-accent-soft: rgba(10, 10, 10, 0.06);
+  --jp-accent-grad: #ff3b00;
+  --jp-canvas: #ff3b00;
+  --jp-bg: #f7f4ee;
+  --jp-surface: #ffffff;
+  --jp-ink: #0a0a0a;
+  --jp-ink-text: #f7f4ee;
+  --jp-signal: #ff3b00;
+  --jp-text: #0a0a0a;
+  --jp-muted: rgba(10, 10, 10, 0.62);
+  --jp-border: #0a0a0a;
+  --jp-border-w: 2px;
+  --jp-nav-bg: #f7f4ee;
+}
+
+/* ===== Brutal layout helpers (grid linky podľa témy) ===== */
+@utility bl-cell { border: var(--jp-border-w) solid var(--jp-border); }
+@utility bl-bt { border-top: var(--jp-border-w) solid var(--jp-border); }
+@utility bl-bb { border-bottom: var(--jp-border-w) solid var(--jp-border); }
+@utility bl-bl { border-left: var(--jp-border-w) solid var(--jp-border); }
+@utility bl-br { border-right: var(--jp-border-w) solid var(--jp-border); }
+/* mriežka: medzery medzi bunkami ukazujú farbu linky */
+@utility bl-grid { display: grid; gap: var(--jp-border-w); background: var(--jp-border); }
+.bl-display { font-family: var(--jp-display-font); font-weight: 400; letter-spacing: -0.03em; line-height: 0.9; text-transform: uppercase; }
+.bl-mono { font-family: var(--jp-sec-font); text-transform: uppercase; letter-spacing: 0.04em; }
+.bl-arrow { display: inline-block; transition: transform 0.2s ease; }
+.group:hover .bl-arrow, a:hover > .bl-arrow, button:hover > .bl-arrow { transform: translate(3px, -3px); }
+
+@keyframes bl-ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 @keyframes marquee {

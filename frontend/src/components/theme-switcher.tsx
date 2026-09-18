@@ -7,13 +7,10 @@ import { useTheme, type ThemeName } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 const OPTIONS: { key: ThemeName; label: string; route: string; desc: string }[] = [
-  { key: 'corporate', label: 'Corporate', route: '/landing-corporate', desc: 'Profesionálny a čistý' },
-  { key: 'bauhaus', label: 'Bauhaus', route: '/landing-bauhaus', desc: 'Čierna, červená, brutal' },
   { key: 'bauhaus2', label: 'Bauhaus 2', route: '/landing-bauhaus2', desc: 'Brutalizmus + kajamlabs' },
-  { key: 'editorial', label: 'Editorial', route: '/landing-editorial', desc: 'Magazín, serif, red' },
-  { key: 'neon', label: 'Neon', route: '/landing-neon', desc: 'Dark, glow, cyber' },
-  { key: 'retro', label: 'Retro', route: '/landing-retro', desc: '70s, teplé, hravé' },
-  { key: 'minimal', label: 'Minimal', route: '/landing-minimal', desc: 'Ultra čisté, whitespace' },
+  { key: 'brutal', label: 'Brutal', route: '/landing-brutal', desc: 'Grid, mono, oranžová, rám' },
+  { key: 'brutal-dark', label: 'Brutal Dark', route: '/landing-brutal-dark', desc: 'Čierna, biele linky, mono' },
+  { key: 'brutal-signal', label: 'Brutal Signal', route: '/landing-brutal-signal', desc: 'Oranžový hero, tvrdý grid' },
 ];
 
 export function ThemeSwitcher({ className, light }: { className?: string; light?: boolean }) {
