@@ -52,26 +52,36 @@ function Nav() {
   );
 }
 
+/** Fialový hák „J": hrubý ťah s veľkým zaoblením (referencia: UI. Beginner's) */
+function HookArc({ className = '', style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 560 560" className={className} style={style} preserveAspectRatio="none" aria-hidden>
+      <path d="M92 0 V310 A188 188 0 0 0 468 310 V120" fill="none" stroke="var(--jp-violet)" strokeWidth="96" />
+    </svg>
+  );
+}
+
 /* =====================================================================
-   1) SWISS — zvislý pás cez fotku
+   1) SWISS — fialový hák cez fotku
    ===================================================================== */
 function BarLayout({ jobs, stats }: Props) {
   return (
     <div className="min-h-screen bg-[var(--jp-bg)] text-[var(--jp-text)]" style={{ fontFamily: 'var(--jp-font)' }}>
       <Nav />
 
-      {/* HERO: fialový pás + ČB fotka vľavo, text vpravo, zvislý popis */}
+      {/* HERO: fialový hák (J) za ČB fotkou vľavo, text vpravo, zvislý popis */}
       <section className="relative grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] min-h-[680px] overflow-hidden">
-        <div className="absolute left-[7%] top-0 bottom-0 w-[22%] hidden lg:block" style={{ background: VI }} />
-        <div className="absolute left-4 top-8 w-6 h-6 rounded-full border border-[#111]/20 hidden lg:block" />
-        <div className="absolute left-[38%] top-[60%] w-24 h-24 rounded-full border border-[#111]/15 hidden lg:block" />
         <div className="absolute left-0 top-10 rotate-180 vrl text-[9px] font-bold border border-[#111] px-1.5 py-2 hidden lg:block" style={mono}>Edícia {new Date().getFullYear()}</div>
+        <div className="absolute left-[46%] top-[62%] w-24 h-24 rounded-full border border-[#111]/15 hidden lg:block" />
 
-        <div className="relative px-5 pt-16 pb-10 lg:pl-[14%] lg:pr-8 flex items-center">
-          <div className="relative aspect-[3/4] w-full max-w-[420px]">
-            <DuoPhoto src={PHOTOS[3]} className="absolute inset-0" base="#c9c9c9" />
-            {/* pás pretína fotku — zarovnaný s pásom v pozadí sekcie */}
-            <div className="absolute inset-y-0 left-0 w-1/2 duo-overlay" style={{ background: VI, opacity: 0.9 }} />
+        <div className="relative px-5 pt-10 pb-0 lg:pl-14 lg:pr-8 flex items-end">
+          <div className="relative w-full max-w-[560px] aspect-square">
+            {/* hák: zvislý pás vľavo, veľké zaoblenie dole, kratšie rameno vpravo */}
+            <HookArc className="absolute inset-0 w-full h-full" />
+            <DuoPhoto src={PHOTOS[1]} className="absolute left-[42%] right-[4%] top-[10%] bottom-0" base="#dcdcdc" />
+            {/* ten istý hák ešte raz, len v oblasti fotky a cez multiply — pás „prechádza" postavou */}
+            <HookArc className="absolute inset-0 w-full h-full duo-overlay" style={{ clipPath: 'inset(10% 4% 0 42%)', opacity: 0.92 }} />
+            <div className="absolute left-3 top-3 w-3 h-3 rounded-full bg-white" />
           </div>
         </div>
 
