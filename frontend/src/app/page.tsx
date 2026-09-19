@@ -6,9 +6,39 @@ import { ArrowUpRight, MapPin, Search } from 'lucide-react';
 import { api } from '@/lib/api';
 import { formatSalary, getJobTypeLabel, formatDate } from '@/lib/utils';
 
+function CountUp({ item, refresh }: { item: string | { to: string; animated?: boolean }; refresh: number }) {
+  const t0 = typeof item === 'string' ? item : item.to;
+  const animated = typeof item !== 'string' && item.animated;
+  const [shown, setShown] = useState('0');
+
+  useEffect(() => {
+    const target = parseFloat(t0.replace(/[^0-9.]/g, ''));
+    const suffix = t0.replace(/[0-9., ]/g, '');
+    if (!animated || Number.isNaN(target)) {
+      setShown(t0);
+      return;
+    }
+    const from = Math.max(0, parseFloat(shown) || 0);
+    const start = performance.now();
+    const dur = 900;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = String(Math.round(from + (target - from) * eased));
+      setShown(`${val}${suffix}`);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [t0, item, animated, refresh]);
+
+  return <>{shown}</>;
+}
+
 export default function HomePage() {
   const [jobs, setJobs] = useState<any[]>([]);
-  const [stats, setStats] = useState(JOB_STATS);
+type StatSpec = { value: string | { to: string; animated?: boolean }; label: string };
+  const [stats, setStats] = useState<StatSpec[]>(JOB_STATS);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     api
@@ -18,20 +48,31 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    api
-      .get<{ pagination: { total: number } }>('/jobs?limit=1')
-      .then((data) => {
-        const total = data.pagination?.total;
-        if (typeof total === 'number' && total > 0) {
-          setStats([
-            { value: String(total).padStart(2, '0'), label: 'Aktívnych ponúk' },
-            { value: String(Math.max(500, total * 3)), label: 'Juniorov v databáze' },
-            { value: '10+', label: 'Overených firiem' },
-            { value: '94%', label: 'Spokojnosť' },
-          ]);
-        }
-      })
-      .catch(() => {});
+    let cancelled = false;
+    const refreshStats = () => {
+      api
+        .get<{ pagination: { total: number } }>('/jobs?limit=1')
+        .then((data) => {
+          if (cancelled) return;
+          const total = data.pagination?.total;
+          if (typeof total === 'number' && total > 0) {
+            setStats([
+              { value: { to: String(total).padStart(2, '0'), animated: true }, label: 'Aktívnych ponúk' },
+              { value: { to: String(Math.max(500, total * 3)), animated: true }, label: 'Juniorov v databáze' },
+              { value: { to: '10+', animated: false }, label: 'Overených firiem' },
+              { value: { to: '94%', animated: false }, label: 'Spokojnosť' },
+            ]);
+            setTick((t) => t + 1);
+          }
+        })
+        .catch(() => {});
+    };
+    refreshStats();
+    const id = setInterval(refreshStats, 30_000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
   }, []);
 
   const Square = () => <span className="inline-block w-2.5 h-2.5 bg-[var(--jp-signal)] shrink-0" />;
@@ -58,7 +99,7 @@ export default function HomePage() {
               </div>
               <div className="p-6 sm:p-8 border-t-2 lg:border-t-0 border-[var(--jp-ink-text)]">
                 <h1 className="bl-display text-[16vw] sm:text-[11vw] lg:text-[8.5rem]">
-                  Práca,<br />ktorá robí<br /><span className="text-[var(--jp-signal)]">hluk.</span>
+                  Štartuj<br />svoju<br /><span className="text-[var(--jp-signal)]">kariéru.</span>
                 </h1>
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                   <p className="bl-mono text-[13px] leading-6 opacity-80">
@@ -120,7 +161,7 @@ export default function HomePage() {
           <section className="border-b-2 border-[var(--jp-border)] grid grid-cols-2 md:grid-cols-4 gap-[2px] bg-[var(--jp-border)]">
             {stats.map((s, i) => (
               <div key={i} className="p-6 sm:p-8 bg-[var(--jp-bg)]">
-                <div className="bl-display text-4xl sm:text-5xl text-[var(--jp-signal)]">{s.value}</div>
+                <div className="bl-display text-4xl sm:text-5xl text-[var(--jp-signal)]"><CountUp item={s.value} refresh={tick} /></div>
                 <div className="bl-mono mt-3 text-[11px] text-[var(--jp-muted)]">{s.label}</div>
               </div>
             ))}
