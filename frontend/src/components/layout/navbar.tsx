@@ -38,7 +38,7 @@ export function Navbar() {
         <div className="h-10 w-24 animate-pulse border-2 border-[var(--jp-border)] bg-[var(--jp-surface)] md:hidden" />
       ) : user ? (
         <>
-          <div className="md:hidden flex flex-col gap-1 pt-2 border-t-2 border-[var(--jp-border)]">
+          <div className="md:hidden flex flex-col gap-1 pt-2">
             <p className="bl-mono text-[12px] font-semibold text-[var(--jp-muted)] px-1">
               {user.firstName} {user.lastName} — {user.role === 'ADMIN' ? 'Admin' : user.role === 'CANDIDATE' ? 'Kandidát' : 'Firma'}
             </p>
@@ -96,11 +96,11 @@ export function Navbar() {
         </>
       ) : (
         <>
-          <div className="md:hidden flex flex-col gap-2 pt-2 border-t-2 border-[var(--jp-border)]">
-            <Link href="/auth/login" onClick={() => setMobileOpen(false)} className="bl-mono text-[14px] font-bold uppercase text-[var(--jp-text)] hover:text-[var(--jp-signal)] py-1">
+          <div className="md:hidden grid grid-cols-2 gap-3">
+            <Link href="/auth/login" onClick={() => setMobileOpen(false)} className="bl-mono flex h-[52px] w-full min-w-0 items-center justify-center border-2 border-[var(--jp-text)] px-2 text-[14px] font-bold uppercase text-[var(--jp-text)] hover:border-[var(--jp-signal)] hover:text-[var(--jp-signal)] transition-colors">
               Prihlásiť
             </Link>
-            <Link href="/auth/register" onClick={() => setMobileOpen(false)} className="bl-mono text-[14px] font-bold uppercase text-[var(--jp-text)] hover:text-[var(--jp-signal)] py-1">
+            <Link href="/auth/register" onClick={() => setMobileOpen(false)} className="bl-mono flex h-[52px] w-full min-w-0 items-center justify-center border-2 border-[var(--jp-text)] bg-[var(--jp-signal)] px-2 text-[14px] font-bold uppercase text-[var(--jp-text)] hover:opacity-80 transition-colors">
               Registrovať
             </Link>
           </div>
