@@ -159,6 +159,9 @@ export function Navbar() {
         <div className="md:hidden bg-[var(--jp-bg)] border-t-2 border-[var(--jp-border)] pb-4">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-4 pt-4">
             {navLinks}
+            <div className="flex flex-col gap-4 border-t-2 border-[var(--jp-border)] pr-4 pt-3">
+              {authActions}
+            </div>
           </div>
         </div>
       )}
